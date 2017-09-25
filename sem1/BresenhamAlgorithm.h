@@ -9,7 +9,6 @@
 #include <utility>
 
 using namespace System;
-using namespace std;
 
 ref class BresenhamAlgorithm
 {

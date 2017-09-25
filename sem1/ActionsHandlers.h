@@ -9,6 +9,7 @@
 
 using namespace System::Windows::Forms;
 using namespace System;
+using namespace System::IO;
 
 ref class ActionsHandlers
 {
@@ -39,6 +40,7 @@ public:
 	bool IsDrawn;
 
 	ActionsHandlers(PictureBox^ pictureBox);
+	ActionsHandlers();
 	~ActionsHandlers();
 
 	//Point is cursor values relatively pictureBox
@@ -53,6 +55,8 @@ public:
 	void EllipsePictureBoxOnClickHandler(Point^ point);
 
 	void RandomButtonClickHandler();
+
+	void getObjectsFormFileClickHandler();
 };
 
 

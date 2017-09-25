@@ -3,6 +3,7 @@
 
 ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox)
 {
+
 	brezDrawing = gcnew BresenhamDrawing(pictureBox);
 
 	//The default Values for all geometric objects variables are "-1"
@@ -19,6 +20,11 @@ ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox)
 	this->pictureBox->Image = bitmap;
 
 	IsDrawn = false;
+}
+
+ActionsHandlers::ActionsHandlers()
+{
+	throw gcnew System::NotImplementedException();
 }
 
 
@@ -131,7 +137,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 	
 	for (int i = 0; i < figuresCount; i++)
 	{
-		int	choice = rnd->Next(1, 3);
+		int	choice = 3;//rnd->Next(1, 3);
 
 		if (choice == 1)
 		{
@@ -161,6 +167,64 @@ void ActionsHandlers::RandomButtonClickHandler()
 
 			brezDrawing->DrawEllipse(point0, width, height);
 		}
+	}
+}
+
+void ActionsHandlers::getObjectsFormFileClickHandler()
+{
+	String^ fileName = "objects.txt";
+	try
+	{
+		Console::WriteLine("trying to open file {0}...", fileName);
+		StreamReader^ din = File::OpenText(fileName);
+
+		array<String^>^ objects = din->ReadToEnd()->Split(';');
+
+		String^ figure;
+		array<String^>^ values;
+
+		for each (String^ obj in objects)
+		{
+			figure = obj->Split(':')[0]->ToLower()->Trim();
+			values = obj->Split(':')[1]->Split(',');
+
+			if (String::Compare(figure, "line") == 0)
+			{
+				point0->X = Int32::Parse(values[0]->Trim());
+				point0->Y = Int32::Parse(values[1]->Trim());
+				point1->X = Int32::Parse(values[2]->Trim());
+				point1->Y = Int32::Parse(values[3]->Trim());
+
+				brezDrawing->DrawLine(point0, point1);
+			}
+
+			if (String::Compare(figure, "circle") == 0)
+			{
+				point0->X = Int32::Parse(values[0]->Trim());
+				point0->Y = Int32::Parse(values[1]->Trim());
+				radius = Int32::Parse(values[2]->Trim());
+
+				brezDrawing->DrawCircle(point0, radius);
+			}
+
+			if (String::Compare(figure, "ellipse") == 0)
+			{
+				point0->X = Int32::Parse(values[0]->Trim());
+				point0->Y = Int32::Parse(values[1]->Trim());
+				width = Int32::Parse(values[2]->Trim());
+				height = Int32::Parse(values[3]->Trim());
+
+				brezDrawing->DrawEllipse(point0, width, height);
+			}
+		}
+		
+	}
+	catch (Exception^ e)
+	{
+		if (dynamic_cast<FileNotFoundException^>(e))
+			Console::WriteLine("file '{0}' not found", fileName);
+		else
+			Console::WriteLine("problem reading file '{0}'", fileName);
 	}
 }
 

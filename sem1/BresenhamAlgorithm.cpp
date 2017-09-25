@@ -31,7 +31,7 @@ void BresenhamAlgorithm::BresenhamLine(int x0, int y0, int x1, int y1)
 
 	if (delta_y > delta_x)
 	{
-		swap(delta_x, delta_y);
+		std::swap(delta_x, delta_y);
 	}
 	else
 	{

@@ -253,7 +253,7 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 
 	}
 	private: System::Void objectsFromFileButton_Click(System::Object^  sender, System::EventArgs^  e) {
-
+		actionshandlers->getObjectsFormFileClickHandler();
 	}
 
 };
