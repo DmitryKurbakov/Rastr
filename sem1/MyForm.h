@@ -47,6 +47,11 @@ private: ActionsHandlers^ actionshandlers;
 
 private: System::Windows::Forms::GroupBox^  pictureGroupBox;
 private: System::Windows::Forms::PictureBox^  pictureBox;
+private: System::Windows::Forms::GroupBox^  settingsGroupBox;
+private: System::Windows::Forms::Button^  objectsFromFileButton;
+
+
+private: System::Windows::Forms::Button^  randomButton;
 
 private: System::Windows::Forms::Button^  clearButton;
 //private:
@@ -76,9 +81,13 @@ private:
 		this->lineRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->pictureGroupBox = (gcnew System::Windows::Forms::GroupBox());
 		this->pictureBox = (gcnew System::Windows::Forms::PictureBox());
+		this->settingsGroupBox = (gcnew System::Windows::Forms::GroupBox());
+		this->objectsFromFileButton = (gcnew System::Windows::Forms::Button());
+		this->randomButton = (gcnew System::Windows::Forms::Button());
 		this->objectsGroupBox->SuspendLayout();
 		this->pictureGroupBox->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->BeginInit();
+		this->settingsGroupBox->SuspendLayout();
 		this->SuspendLayout();
 		// 
 		// clearButton
@@ -99,7 +108,7 @@ private:
 		this->objectsGroupBox->Controls->Add(this->lineRadioButton);
 		this->objectsGroupBox->Location = System::Drawing::Point(12, 12);
 		this->objectsGroupBox->Name = L"objectsGroupBox";
-		this->objectsGroupBox->Size = System::Drawing::Size(97, 89);
+		this->objectsGroupBox->Size = System::Drawing::Size(121, 89);
 		this->objectsGroupBox->TabIndex = 4;
 		this->objectsGroupBox->TabStop = false;
 		this->objectsGroupBox->Text = L"Object";
@@ -143,9 +152,9 @@ private:
 			| System::Windows::Forms::AnchorStyles::Right));
 		this->pictureGroupBox->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 		this->pictureGroupBox->Controls->Add(this->pictureBox);
-		this->pictureGroupBox->Location = System::Drawing::Point(115, 12);
+		this->pictureGroupBox->Location = System::Drawing::Point(139, 12);
 		this->pictureGroupBox->Name = L"pictureGroupBox";
-		this->pictureGroupBox->Size = System::Drawing::Size(754, 383);
+		this->pictureGroupBox->Size = System::Drawing::Size(730, 383);
 		this->pictureGroupBox->TabIndex = 6;
 		this->pictureGroupBox->TabStop = false;
 		this->pictureGroupBox->Text = L"Picture";
@@ -158,14 +167,46 @@ private:
 		this->pictureBox->BackColor = System::Drawing::SystemColors::ControlLightLight;
 		this->pictureBox->Location = System::Drawing::Point(6, 19);
 		this->pictureBox->Name = L"pictureBox";
-		this->pictureBox->Size = System::Drawing::Size(742, 358);
+		this->pictureBox->Size = System::Drawing::Size(718, 358);
 		this->pictureBox->TabIndex = 0;
 		this->pictureBox->TabStop = false;
 		this->pictureBox->Click += gcnew System::EventHandler(this, &MyForm::pictureBox_Click);
 		// 
+		// settingsGroupBox
+		// 
+		this->settingsGroupBox->Controls->Add(this->objectsFromFileButton);
+		this->settingsGroupBox->Controls->Add(this->randomButton);
+		this->settingsGroupBox->Location = System::Drawing::Point(12, 107);
+		this->settingsGroupBox->Name = L"settingsGroupBox";
+		this->settingsGroupBox->Size = System::Drawing::Size(121, 77);
+		this->settingsGroupBox->TabIndex = 7;
+		this->settingsGroupBox->TabStop = false;
+		this->settingsGroupBox->Text = L"Settings";
+		// 
+		// objectsFromFileButton
+		// 
+		this->objectsFromFileButton->Location = System::Drawing::Point(10, 48);
+		this->objectsFromFileButton->Name = L"objectsFromFileButton";
+		this->objectsFromFileButton->Size = System::Drawing::Size(101, 23);
+		this->objectsFromFileButton->TabIndex = 1;
+		this->objectsFromFileButton->Text = L"Objects from file...";
+		this->objectsFromFileButton->UseVisualStyleBackColor = true;
+		this->objectsFromFileButton->Click += gcnew System::EventHandler(this, &MyForm::objectsFromFileButton_Click);
+		// 
+		// randomButton
+		// 
+		this->randomButton->Location = System::Drawing::Point(10, 19);
+		this->randomButton->Name = L"randomButton";
+		this->randomButton->Size = System::Drawing::Size(101, 23);
+		this->randomButton->TabIndex = 0;
+		this->randomButton->Text = L"Random";
+		this->randomButton->UseVisualStyleBackColor = true;
+		this->randomButton->Click += gcnew System::EventHandler(this, &MyForm::randomButton_Click);
+		// 
 		// MyForm
 		// 
 		this->ClientSize = System::Drawing::Size(884, 410);
+		this->Controls->Add(this->settingsGroupBox);
 		this->Controls->Add(this->pictureGroupBox);
 		this->Controls->Add(this->objectsGroupBox);
 		this->Controls->Add(this->clearButton);
@@ -175,6 +216,7 @@ private:
 		this->objectsGroupBox->PerformLayout();
 		this->pictureGroupBox->ResumeLayout(false);
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->EndInit();
+		this->settingsGroupBox->ResumeLayout(false);
 		this->ResumeLayout(false);
 
 	}
@@ -199,10 +241,19 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 
 	delete cursor_point;
 }
-private: System::Void clearButton_Click(System::Object^  sender, System::EventArgs^  e) {
-	delete pictureBox->Image;
-	delete actionshandlers;
+	private: System::Void clearButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		delete pictureBox->Image;
+		delete actionshandlers;
 
-	actionshandlers = gcnew ActionsHandlers(pictureBox);
-}
+		actionshandlers = gcnew ActionsHandlers(pictureBox);
+	}
+	private: System::Void randomButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		actionshandlers->RandomButtonClickHandler();
+
+	}
+	private: System::Void objectsFromFileButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+	}
+
 };

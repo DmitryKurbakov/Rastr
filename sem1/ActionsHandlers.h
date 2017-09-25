@@ -8,6 +8,7 @@
 #include "BresenhamDrawing.h"
 
 using namespace System::Windows::Forms;
+using namespace System;
 
 ref class ActionsHandlers
 {
@@ -50,6 +51,8 @@ public:
 
 	//Ellipse was checked in MyForm by User
 	void EllipsePictureBoxOnClickHandler(Point^ point);
+
+	void RandomButtonClickHandler();
 };
 
 

@@ -124,4 +124,46 @@ void ActionsHandlers::EllipsePictureBoxOnClickHandler(Point^ point)
 	}
 }
 
+void ActionsHandlers::RandomButtonClickHandler()
+{
+	Random^ rnd = gcnew Random();
+	int figuresCount = rnd->Next(1, 10);
+	
+	for (int i = 0; i < figuresCount; i++)
+	{
+		int	choice = rnd->Next(1, 3);
+
+		if (choice == 1)
+		{
+			point0->X = rnd->Next(0, pictureBox->Width);
+			point0->Y = rnd->Next(0, pictureBox->Height);
+			point1->X = rnd->Next(0, pictureBox->Width);
+			point1->Y = rnd->Next(0, pictureBox->Height);
+
+			brezDrawing->DrawLine(point0, point1);
+		}
+
+		if (choice == 2)
+		{
+			point0->X = rnd->Next(0, pictureBox->Width);
+			point0->Y = rnd->Next(0, pictureBox->Height);
+			radius = rnd->Next(0, pictureBox->Height);
+
+			brezDrawing->DrawCircle(point0, radius);
+		}
+
+		if (choice == 3)
+		{
+			point0->X = rnd->Next(0, pictureBox->Width);
+			point0->Y = rnd->Next(0, pictureBox->Height);
+			width = rnd->Next(0, pictureBox->Height);
+			height = rnd->Next(0, pictureBox->Height);
+
+			brezDrawing->DrawEllipse(point0, width, height);
+		}
+	}
+}
+
+
+
 

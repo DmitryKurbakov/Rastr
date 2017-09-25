@@ -33,9 +33,6 @@ void BresenhamDrawing::DrawLine(Point^ point0, Point^ point1)
 	Pen^ redPen = gcnew Pen(Color::Red);
 	graphics->DrawLine(redPen, point0->X, point0->Y, point1->X, point1->Y);
 
-	bitmap->SetPixel(point0->X, point0->Y, Color::Black);
-	bitmap->SetPixel(point1->X, point1->Y, Color::Black);
-
 	delete pictureBox->Image;
 	pictureBox->Image = bitmap;
 
@@ -65,14 +62,11 @@ void BresenhamDrawing::DrawCircle(Point^ center, int radius)
 
 	delete pictureBox->Image;
 
-	bitmap->SetPixel(center->X, center->Y, Color::Black);
 	pictureBox->Image = bitmap;
 
 	//Draw cirle using the Bresenham method with black pen
 	BresenhamCircle(center->X, center->Y, radius);
 	Draw();
-
-	
 
 	delete bitmap;
 	delete graphics;
@@ -94,8 +88,6 @@ void BresenhamDrawing::DrawEllipse(Point^ center, int width, int height)
 
 	Pen^ redPen = gcnew Pen(Color::Red);
 	graphics->DrawEllipse(redPen, center->X - width, center->Y - height, width * 2, height * 2);
-
-	bitmap->SetPixel(center->X, center->Y, Color::Black);
 
 	delete pictureBox->Image;
 	pictureBox->Image = bitmap;
