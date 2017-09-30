@@ -182,7 +182,6 @@ void BresenhamAlgorithm::BresenhamEllipse(int x0, int y0, int x_radius, int y_ra
 	}
 }
 
-
 void BresenhamAlgorithm::PutPointsToEllipseSet(int x, int y, int x0, int y0)
 {
 	PushPoint(x0 + x, y0 + y);

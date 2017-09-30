@@ -9,6 +9,7 @@
 #include <utility>
 
 using namespace System;
+using namespace System::Collections;
 
 ref class BresenhamAlgorithm
 {
@@ -26,5 +27,6 @@ public:
 	void BresenhamLine(int x0, int y0, int x1, int y1);
 	void BresenhamCircle(int x0, int y0, int radius);
 	void BresenhamEllipse(int x0, int y0, int x_radius, int y_radius);
+
 };
 

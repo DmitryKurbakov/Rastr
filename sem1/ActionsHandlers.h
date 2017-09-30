@@ -54,6 +54,10 @@ public:
 	//Ellipse was checked in MyForm by User
 	void EllipsePictureBoxOnClickHandler(Point^ point);
 
+	void LineFillingAreaPictureBoxOnClickHandler(Point^ point);
+
+	void PolygonFillingAreaPictureBoxOnClickHandler(Point^ point);
+
 	void RandomButtonClickHandler();
 
 	void getObjectsFormFileClickHandler();

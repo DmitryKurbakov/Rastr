@@ -18,10 +18,14 @@ private:
 	//Method of setting pixels on the picture using Algorithm layer
 	void Draw();
 
+	bool IsBorder(Bitmap^ bmp, int x, int y);
+
 	//Reference to the PictureBox from MyForm
 	System::Windows::Forms::PictureBox^  pictureBox;
 
 public:
+	System::Collections::Stack^ fillingStack;
+
 	BresenhamDrawing(System::Windows::Forms::PictureBox^ pictureBox);
 	~BresenhamDrawing();
 	System::Windows::Forms::PictureBox^ getPictureBox();
@@ -37,4 +41,7 @@ public:
 	//Draw ellipse in the PictureBox using two methods: Bresenham algorithm and Graphics.DrawEllipse(...)
 	void DrawEllipse(int x0, int y0, int width, int height);
 	void DrawEllipse(Point^ center, int width, int height);
+
+	Bitmap^ LineFillWithSeed(Bitmap^ bm, int x, int y, Color c);
+	Bitmap^ PolygonFill(Bitmap^ bmp, int x, int y, Color c);
 };

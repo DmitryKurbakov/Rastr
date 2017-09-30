@@ -52,6 +52,11 @@ private: System::Windows::Forms::Button^  objectsFromFileButton;
 
 
 private: System::Windows::Forms::Button^  randomButton;
+private: System::Windows::Forms::RadioButton^  LineFillingRadioButton;
+private: System::Windows::Forms::RadioButton^  PolygonFillingRadioButton;
+
+
+
 
 private: System::Windows::Forms::Button^  clearButton;
 //private:
@@ -76,6 +81,7 @@ private:
 	{
 		this->clearButton = (gcnew System::Windows::Forms::Button());
 		this->objectsGroupBox = (gcnew System::Windows::Forms::GroupBox());
+		this->LineFillingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->ellipseRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->circleRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->lineRadioButton = (gcnew System::Windows::Forms::RadioButton());
@@ -84,6 +90,7 @@ private:
 		this->settingsGroupBox = (gcnew System::Windows::Forms::GroupBox());
 		this->objectsFromFileButton = (gcnew System::Windows::Forms::Button());
 		this->randomButton = (gcnew System::Windows::Forms::Button());
+		this->PolygonFillingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->objectsGroupBox->SuspendLayout();
 		this->pictureGroupBox->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->BeginInit();
@@ -103,15 +110,27 @@ private:
 		// 
 		// objectsGroupBox
 		// 
+		this->objectsGroupBox->Controls->Add(this->PolygonFillingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->ellipseRadioButton);
+		this->objectsGroupBox->Controls->Add(this->LineFillingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->circleRadioButton);
 		this->objectsGroupBox->Controls->Add(this->lineRadioButton);
 		this->objectsGroupBox->Location = System::Drawing::Point(12, 12);
 		this->objectsGroupBox->Name = L"objectsGroupBox";
-		this->objectsGroupBox->Size = System::Drawing::Size(121, 89);
+		this->objectsGroupBox->Size = System::Drawing::Size(121, 136);
 		this->objectsGroupBox->TabIndex = 4;
 		this->objectsGroupBox->TabStop = false;
 		this->objectsGroupBox->Text = L"Object";
+		// 
+		// LineFillingRadioButton
+		// 
+		this->LineFillingRadioButton->AutoSize = true;
+		this->LineFillingRadioButton->Location = System::Drawing::Point(10, 88);
+		this->LineFillingRadioButton->Name = L"LineFillingRadioButton";
+		this->LineFillingRadioButton->Size = System::Drawing::Size(45, 17);
+		this->LineFillingRadioButton->TabIndex = 3;
+		this->LineFillingRadioButton->Text = L"Line";
+		this->LineFillingRadioButton->UseVisualStyleBackColor = true;
 		// 
 		// ellipseRadioButton
 		// 
@@ -176,7 +195,7 @@ private:
 		// 
 		this->settingsGroupBox->Controls->Add(this->objectsFromFileButton);
 		this->settingsGroupBox->Controls->Add(this->randomButton);
-		this->settingsGroupBox->Location = System::Drawing::Point(12, 107);
+		this->settingsGroupBox->Location = System::Drawing::Point(12, 154);
 		this->settingsGroupBox->Name = L"settingsGroupBox";
 		this->settingsGroupBox->Size = System::Drawing::Size(121, 77);
 		this->settingsGroupBox->TabIndex = 7;
@@ -202,6 +221,16 @@ private:
 		this->randomButton->Text = L"Random";
 		this->randomButton->UseVisualStyleBackColor = true;
 		this->randomButton->Click += gcnew System::EventHandler(this, &MyForm::randomButton_Click);
+		// 
+		// PolygonFillingRadioButton
+		// 
+		this->PolygonFillingRadioButton->AutoSize = true;
+		this->PolygonFillingRadioButton->Location = System::Drawing::Point(10, 111);
+		this->PolygonFillingRadioButton->Name = L"PolygonFillingRadioButton";
+		this->PolygonFillingRadioButton->Size = System::Drawing::Size(63, 17);
+		this->PolygonFillingRadioButton->TabIndex = 4;
+		this->PolygonFillingRadioButton->Text = L"Polygon";
+		this->PolygonFillingRadioButton->UseVisualStyleBackColor = true;
 		// 
 		// MyForm
 		// 
@@ -237,6 +266,14 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 	if (ellipseRadioButton->Checked)
 	{
 		actionshandlers->EllipsePictureBoxOnClickHandler(cursor_point);
+	}
+	if (LineFillingRadioButton->Checked)
+	{
+		actionshandlers->LineFillingAreaPictureBoxOnClickHandler(cursor_point);
+	}
+	if (PolygonFillingRadioButton->Checked)
+	{
+		actionshandlers->PolygonFillingAreaPictureBoxOnClickHandler(cursor_point);
 	}
 
 	delete cursor_point;

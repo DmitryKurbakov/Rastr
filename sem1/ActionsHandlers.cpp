@@ -130,6 +130,20 @@ void ActionsHandlers::EllipsePictureBoxOnClickHandler(Point^ point)
 	}
 }
 
+void ActionsHandlers::LineFillingAreaPictureBoxOnClickHandler(Point ^ point)
+{
+	Bitmap^ bmp = gcnew Bitmap(pictureBox->Image);
+	delete pictureBox->Image;
+	pictureBox->Image = brezDrawing->LineFillWithSeed(bmp, point->X, point->Y, Color::Green);
+}
+
+void ActionsHandlers::PolygonFillingAreaPictureBoxOnClickHandler(Point ^ point)
+{
+	Bitmap^ bmp = gcnew Bitmap(pictureBox->Image);
+	delete pictureBox->Image;
+	pictureBox->Image = brezDrawing->PolygonFill(bmp, point->X, point->Y, Color::Green);
+}
+
 void ActionsHandlers::RandomButtonClickHandler()
 {
 	Random^ rnd = gcnew Random();
@@ -137,7 +151,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 	
 	for (int i = 0; i < figuresCount; i++)
 	{
-		int	choice = 3;//rnd->Next(1, 3);
+		int	choice = rnd->Next(1, 3);
 
 		if (choice == 1)
 		{
