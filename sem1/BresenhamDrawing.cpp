@@ -240,49 +240,64 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 	while (stack->Count > 0)
 	{
 		p = (Point^)stack->Pop();
-		col = bmp->GetPixel(p->X, p->Y);
 
-		if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+		if (!IsBorder(bmp, p->X, p->Y))
 		{
-			bmp->SetPixel(p->X, p->Y, c);
+			col = bmp->GetPixel(p->X, p->Y);
+
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			{
+				bmp->SetPixel(p->X, p->Y, c);
+			}
 		}
-
-		col = bmp->GetPixel(p->X, p->Y + 1);
-
-		if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+		
+		if (!IsBorder(bmp, p->X, p->Y + 1))
 		{
-			Point^ tempPoint = gcnew Point(p->X, p->Y + 1);
-			stack->Push(tempPoint);
-			delete tempPoint;
+			col = bmp->GetPixel(p->X, p->Y + 1);
+
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			{
+				Point^ tempPoint = gcnew Point(p->X, p->Y + 1);
+				stack->Push(tempPoint);
+				delete tempPoint;
+			}
 		}
-
-		col = bmp->GetPixel(p->X + 1, p->Y);
-
-		if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+		
+		if (!IsBorder(bmp, p->X + 1, p->Y))
 		{
-			Point^ tempPoint = gcnew Point(p->X + 1, p->Y);
-			stack->Push(tempPoint);
-			delete tempPoint;
+			col = bmp->GetPixel(p->X + 1, p->Y);
+
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			{
+				Point^ tempPoint = gcnew Point(p->X + 1, p->Y);
+				stack->Push(tempPoint);
+				delete tempPoint;
+			}
 		}
-
-		col = bmp->GetPixel(p->X, p->Y - 1);
-
-		if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+		
+		if (!IsBorder(bmp, p->X, p->Y - 1))
 		{
-			Point^ tempPoint = gcnew Point(p->X, p->Y - 1);
-			stack->Push(tempPoint);
-			delete tempPoint;
-		}
+			col = bmp->GetPixel(p->X, p->Y - 1);
 
-		col = bmp->GetPixel(p->X - 1, p->Y);
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			{
+				Point^ tempPoint = gcnew Point(p->X, p->Y - 1);
+				stack->Push(tempPoint);
+				delete tempPoint;
+			}
+		}		
 
-		if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+		if (!IsBorder(bmp, p->X, p->Y))
 		{
-			Point^ tempPoint = gcnew Point(p->X - 1, p->Y);
-			stack->Push(tempPoint);
-			delete tempPoint;
-		}
+			col = bmp->GetPixel(p->X - 1, p->Y);
 
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			{
+				Point^ tempPoint = gcnew Point(p->X - 1, p->Y);
+				stack->Push(tempPoint);
+				delete tempPoint;
+			}
+		}
 	}
 
 	delete p;
@@ -313,10 +328,11 @@ void BresenhamDrawing::Draw()
 
 bool BresenhamDrawing::IsBorder(Bitmap^ bmp, int x, int y)
 {
-	return x <= 0 
-	|| x >= bmp->Width
-	|| y <= 0 || y >= bmp->Height
-	|| (bmp->GetPixel(x, y).ToArgb() == Color::Blue.ToArgb());
+	return 
+		x <= 0
+		|| x >= bmp->Width
+		|| y <= 0 
+		|| y >= bmp->Height;
 }
 
 
