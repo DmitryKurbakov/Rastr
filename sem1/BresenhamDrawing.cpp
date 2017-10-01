@@ -3,7 +3,7 @@
 BresenhamDrawing::BresenhamDrawing(System::Windows::Forms::PictureBox^ pictureBox)
 {
 	this->pictureBox = pictureBox;
-	this->fillingStack = gcnew System::Collections::Stack();
+	geometricObjectList = gcnew System::Collections::Generic::List<GeometricObject^>();
 }
 
 
@@ -18,13 +18,8 @@ System::Windows::Forms::PictureBox ^ BresenhamDrawing::getPictureBox()
 	return this->pictureBox;
 }
 
-void BresenhamDrawing::DrawLine(int x0, int y0, int x1, int y1)
-{
-	BresenhamLine(x0, y0, x1, y1);
-	Draw();
-}
 
-void BresenhamDrawing::DrawLine(Point^ point0, Point^ point1)
+void BresenhamDrawing::DrawLine(Point^ point0, Point^ point1, Color c)
 {
 
 	////Draw line using the Graphics method with red pen
@@ -39,20 +34,19 @@ void BresenhamDrawing::DrawLine(Point^ point0, Point^ point1)
 
 	//Draw line using the Bresenham method with black pen
 	BresenhamLine(point0->X, point0->Y, point1->X, point1->Y);
-	Draw();
+	Line^ line = gcnew Line(c);
+	line->SetPoint0(point0);
+	line->SetPoint1(point1);
+	geometricObjectList->Add(line);
+	Draw(c);
 
 	/*delete bitmap;
 	delete graphics;
 	delete redPen;*/
 }
 
-void BresenhamDrawing::DrawCircle(int x0, int y0, int radius)
-{
-	BresenhamCircle(x0, y0, radius);
-	Draw();
-}
 
-void BresenhamDrawing::DrawCircle(Point^ center, int radius)
+void BresenhamDrawing::DrawCircle(Point^ center, int radius, Color c)
 {
 	//Draw cirle using the Graphics method with red pen
 	/*Bitmap^ bitmap = gcnew Bitmap(pictureBox->Image);
@@ -67,20 +61,18 @@ void BresenhamDrawing::DrawCircle(Point^ center, int radius)
 
 	//Draw cirle using the Bresenham method with black pen
 	BresenhamCircle(center->X, center->Y, radius);
-	Draw();
+	Circle^ circle = gcnew Circle(c);
+	circle->SetPoint0(center);
+	circle->SetRadius(radius);
+	geometricObjectList->Add(circle);
+	Draw(c);
 
 	/*delete bitmap;
 	delete graphics;
 	delete redPen;*/
 }
 
-void BresenhamDrawing::DrawEllipse(int x0, int y0, int width, int height)
-{
-	BresenhamEllipse(x0, y0, width, height);
-	Draw();
-}
-
-void BresenhamDrawing::DrawEllipse(Point^ center, int width, int height)
+void BresenhamDrawing::DrawEllipse(Point^ center, int width, int height, Color c)
 {
 
 	//Draw cirle using the Graphics method with red pen
@@ -95,7 +87,12 @@ void BresenhamDrawing::DrawEllipse(Point^ center, int width, int height)
 
 	//Draw cirle using the Graphics method with green pen
 	BresenhamEllipse(center->X, center->Y, width, height);
-	Draw();
+	Ellipse^ ellipse = gcnew Ellipse(c);
+	ellipse->SetPoint0(center);
+	ellipse->SetWidth(width);
+	ellipse->SetHeight(height);
+	geometricObjectList->Add(ellipse);
+	Draw(c);
 
 	/*delete bitmap;
 	delete graphics;
@@ -231,6 +228,8 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 	Stack^ stack = gcnew Stack();
 	Color col;
 
+	Color argb = bmp->GetPixel(x, y);
+
 	bmp->SetPixel(x, y, c);
 
 	Point^ p = gcnew Point(x, y);
@@ -245,7 +244,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 		{
 			col = bmp->GetPixel(p->X, p->Y);
 
-			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
 				bmp->SetPixel(p->X, p->Y, c);
 			}
@@ -255,7 +254,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 		{
 			col = bmp->GetPixel(p->X, p->Y + 1);
 
-			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
 				Point^ tempPoint = gcnew Point(p->X, p->Y + 1);
 				stack->Push(tempPoint);
@@ -267,7 +266,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 		{
 			col = bmp->GetPixel(p->X + 1, p->Y);
 
-			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
 				Point^ tempPoint = gcnew Point(p->X + 1, p->Y);
 				stack->Push(tempPoint);
@@ -279,7 +278,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 		{
 			col = bmp->GetPixel(p->X, p->Y - 1);
 
-			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
 				Point^ tempPoint = gcnew Point(p->X, p->Y - 1);
 				stack->Push(tempPoint);
@@ -291,7 +290,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 		{
 			col = bmp->GetPixel(p->X - 1, p->Y);
 
-			if (col.ToArgb() != c.ToArgb() && col.ToArgb() != Color::Blue.ToArgb())
+			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
 				Point^ tempPoint = gcnew Point(p->X - 1, p->Y);
 				stack->Push(tempPoint);
@@ -307,7 +306,7 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 
 
 
-void BresenhamDrawing::Draw()
+void BresenhamDrawing::Draw(Color c)
 {
 	temp_bitmap = gcnew Bitmap(pictureBox->Image);
 
@@ -316,7 +315,7 @@ void BresenhamDrawing::Draw()
 		if (points[i]->Item1 < temp_bitmap->Width && points[i]->Item1 > 0 &&
 			points[i]->Item2 < temp_bitmap->Height && points[i]->Item2 > 0)
 		{
-			temp_bitmap->SetPixel(points[i]->Item1, points[i]->Item2, Color::Blue);
+			temp_bitmap->SetPixel(points[i]->Item1, points[i]->Item2, c);
 		}		
 	}
 

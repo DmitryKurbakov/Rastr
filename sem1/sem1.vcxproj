@@ -137,12 +137,20 @@
     <ClCompile Include="ActionsHandlers.cpp" />
     <ClCompile Include="BresenhamAlgorithm.cpp" />
     <ClCompile Include="BresenhamDrawing.cpp" />
+    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="Ellipse.cpp" />
+    <ClCompile Include="GeometricObject.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionsHandlers.h" />
     <ClInclude Include="BresenhamAlgorithm.h" />
     <ClInclude Include="BresenhamDrawing.h" />
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Ellipse.h" />
+    <ClInclude Include="GeometricObject.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

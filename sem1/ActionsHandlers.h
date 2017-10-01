@@ -22,6 +22,8 @@ private:
 	//Reference to the PictureBox from MyForm
 	PictureBox^ pictureBox;
 
+	Color color;
+
 	//------------------------------------------------------------------
 	//Geometric Objects Variables
 	//------------------------------------------------------------------
@@ -39,7 +41,9 @@ public:
 
 	bool IsDrawn;
 
-	ActionsHandlers(PictureBox^ pictureBox);
+	void SetColor(Color c);
+
+	ActionsHandlers(PictureBox^ pictureBox, Color c);
 	ActionsHandlers();
 	~ActionsHandlers();
 
