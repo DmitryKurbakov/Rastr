@@ -30,6 +30,8 @@ private:
 	//Reference to the PictureBox from MyForm
 	System::Windows::Forms::PictureBox^  pictureBox;
 
+	int ComputeOutCode(int xL, int yT, int xR, int yB, int x, int y);
+
 public:
 
 	BresenhamDrawing(System::Windows::Forms::PictureBox^ pictureBox);

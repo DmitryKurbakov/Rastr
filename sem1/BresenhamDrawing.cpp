@@ -1,5 +1,6 @@
 #include "BresenhamDrawing.h"
 
+
 BresenhamDrawing::BresenhamDrawing(System::Windows::Forms::PictureBox^ pictureBox)
 {
 	this->pictureBox = pictureBox;
@@ -344,194 +345,105 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 
 	for each (Line^ line in lines->ToArray())
 	{
+		
 		int x0 = line->GetPoint0()->X;
 		int y0 = line->GetPoint0()->Y;
 		int x1 = line->GetPoint1()->X;
 		int y1 = line->GetPoint1()->Y;
-
-		int outcode0 = inside;
-		int outcode1 = inside;
-
-		if (x0 < xL)
-		{
-			outcode0 |= left;
-		}
-		else
-		{
-			if (x0 > xR)
-			{
-				outcode0 |= right;
-			}
-		}
-
-		if (y0 < yB)
-		{
-			outcode0 |= bottom;
-		}
-		else
-		{
-			if (y0 > yT)
-			{
-				outcode0 |= top;
-			}
-		}
-
-		if (x1 < xL)
-		{
-			outcode1 |= left;
-		}
-		else
-		{
-			if (x1 > xR)
-			{
-				outcode1 |= right;
-			}
-		}
-
-		if (y1 < yB)
-		{
-			outcode1 |= bottom;
-		}
-		else
-		{
-			if (y1 > yT)
-			{
-				outcode1 |= top;
-			}
-		}
 		
+		int outcode0 = ComputeOutCode(xL, yT, xR, yB, x0, y0);
+		int outcode1 = ComputeOutCode(xL, yT, xR, yB, x1, y1);
 		bool accept = false;
 
 
 		while (true)
 		{
-			if (!(outcode0 | outcode1))
+			if ((outcode0 | outcode1) == 0)
 			{
 				accept = true;
 				break;
 			}
+			else if ((outcode0 & outcode1) != 0)
+			{
+				lines->Remove(line);
+				break;
+			}
+
 			else
 			{
-				if (outcode0 & outcode1)
-				{
-					lines->Remove(line);
-					break;
-				}
+				int x, y;
 
+				int outCodeOut = (outcode0 != 0) ? outcode0 : outcode1;
+
+
+				if ((outCodeOut & top) != 0)
+				{
+					x = x0 + (x1 - x0) * (yT - y0) / (y1 - y0);
+					y = yT;
+				}
+				else if ((outCodeOut & bottom) != 0)
+				{
+					x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
+					y = yB;
+				}
+				else if ((outCodeOut & right) != 0)
+				{
+					y = y0 + (y1 - y0) * (xR - x0) / (x1 - x0);
+					x = xR;
+				}
+				else if ((outCodeOut & xL) != 0)
+				{
+					y = y0 + (y1 - y0) * (xL - x0) / (x1 - x0);
+					x = xL;
+				}
 				else
 				{
-					int x, y;
-
-					int outcodeOut = outcode0 ? outcode0 : outcode1;
-
-					if (outcodeOut & top)
-					{
-						x = x0 + (x1 - x0) * (yT - y0) / (y1 - y0);
-						y = yT;
-					}
-					else
-					{
-						if (outcodeOut && bottom)
-						{
-							x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
-							y = yB;
-						}
-						else
-						{
-							if (outcodeOut & right)
-							{
-								y = y0 + (y1 - y0) * (xR - x0) / (x1 - x0);
-								x = xR;
-							}
-							else
-							{
-								if (outcodeOut & left)
-								{
-									y = y0 + (y1 - y0) * (xL - x0) / (x1 - x0);
-									x = xL;
-								}
-							}
-						}
-					}
+					x = NULL;
+					y = NULL;
+				}
 
 
-					if (outcodeOut == outcode0)
-					{
-						line->SetPoint0(x, y); 
+				if (outCodeOut == outcode0)
+				{
+					line->SetPoint0(x, y);
 
-						x0 = line->GetPoint0()->X;
-						y0 = line->GetPoint0()->Y;
+					x0 = x;
+					y0 = y;
 
-						outcode0 = 0;
+					outcode0 = ComputeOutCode(xL, yT, xR, yB, x0, y0);
+				}
+				else
+				{
+					line->SetPoint1(x, y);
 
-						if (x0 < xL)
-						{
-							outcode0 |= left;
-						}
-						else
-						{
-							if (x0 > xR)
-							{
-								outcode0 |= right;
-							}
-						}
+					x1 = x;
+					y1 = y;
 
-						if (y0 < yB)
-						{
-							outcode0 |= bottom;
-						}
-						else
-						{
-							if (y0 > yT)
-							{
-								outcode0 |= top;
-							}
-						}
-					}
-
-					else
-					{
-						line->SetPoint1(x, y);
-
-						x1 = line->GetPoint0()->X;
-						y1 = line->GetPoint0()->Y;
-
-						outcode1 = 0;
-
-						if (x1 < xL)
-						{
-							outcode1 |= left;
-						}
-						else
-						{
-							if (x1 > xR)
-							{
-								outcode1 |= right;
-							}
-						}
-
-						if (y1 < yB)
-						{
-							outcode1 |= bottom;
-						}
-						else
-						{
-							if (y1 > yT)
-							{
-								outcode1 |= top;
-							}
-						}
-					}
+					outcode1 = ComputeOutCode(xL, yT, xR, yB, x1, y1);
 				}
 			}
 		}
-
-		
 	}
 
 	return lines;
 }
 
+
+int BresenhamDrawing::ComputeOutCode(int xL, int yT, int xR, int yB, int x, int y)
+{
+	Byte code = 0;
+
+	if (x < xL)
+		code |= 1;
+	else if (x > xR)
+		code |= 2;
+	if (y > yB)
+		code |= 4;
+	else if (y < yT)
+		code |= 8;
+
+	return code;
+}
 
 
 

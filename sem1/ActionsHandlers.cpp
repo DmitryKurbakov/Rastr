@@ -227,14 +227,14 @@ void ActionsHandlers::ClippingHandler(Point^ point)
 		xR = point0->X > point1->X ? point0->X : point1->X;
 		yB = point0->Y > point1->Y ? point0->Y : point1->Y;
 
-		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(xL, yB, xR, yT);
+		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(xL, yT, xR, yB);
 
 		Bitmap^ resultImage = gcnew Bitmap(1920, 1080);
 
 		for each (Line^ line in lines)
 		{
-			line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
-			line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
+			//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
+			//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
 			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), color, false);
 		}
 
