@@ -1,6 +1,5 @@
 #include "ActionsHandlers.h"
 
-
 void ActionsHandlers::SetColor(Color c)
 {
 	this->color = c;
@@ -63,8 +62,15 @@ void ActionsHandlers::LinePictureBoxOnClickHandler(Point^ point)
 	//If values of all points were refreshed, transfer their to Drawing Layer 
 	if (point0->X != -1 && point0->Y != -1 && point1->X != -1 && point1->Y != -1)
 	{
-		brezDrawing->DrawLine(point0, point1, color);
 
+		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+		Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+
+		delete pictureBox->Image;
+		pictureBox->Image = result;
+
+		//delete currentImage;
+		
 		IsDrawn = true;
 
 		//Return default values of points
@@ -91,7 +97,12 @@ void ActionsHandlers::CirclePictureBoxOnClickHandler(Point^ point)
 
 	if (point0->X != -1 && point0->Y != -1 && radius != -1)
 	{
-		brezDrawing->DrawCircle(point0, radius, color);
+		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+		Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+
+		delete pictureBox->Image;
+		pictureBox->Image = result;
+		//delete currentImage;
 
 		IsDrawn = true;
 
@@ -125,8 +136,12 @@ void ActionsHandlers::EllipsePictureBoxOnClickHandler(Point^ point)
 
 	if (point0->X != -1 && point0->Y != -1 && width != -1 && height != -1)
 	{
-		brezDrawing->DrawEllipse(point0, width, height, color);
+		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+		Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
 
+		delete pictureBox->Image;
+		pictureBox->Image = result;
+		//delete currentImage;
 		IsDrawn = true;
 
 		point0->X = -1;
@@ -150,6 +165,53 @@ void ActionsHandlers::PolygonFillingAreaPictureBoxOnClickHandler(Point ^ point)
 	pictureBox->Image = brezDrawing->PolygonFill(bmp, point->X, point->Y, color);
 }
 
+void ActionsHandlers::ClippingHandler(Point^ point)
+{
+	if (point0->X == -1 && point0->Y == -1)
+	{
+		point0->X = point->X;
+		point0->Y = point->Y;
+	}
+
+	//If it was pressed refresh values for the second point
+	else
+	{
+		point1->X = point->X;
+		point1->Y = point->Y;
+	}
+
+	//If values of all points were refreshed, transfer their to Drawing Layer 
+	if (point0->X != -1 && point0->Y != -1 && point1->X != -1 && point1->Y != -1)
+	{
+		if (point0->X > point1->X)
+		{
+			int temp = point0->X;
+			point0->X = point1->X;
+			point1->X = temp;
+
+			temp = point0->Y;
+			point0->Y = point1->Y;
+			point1->Y = temp;
+		}
+
+		if (point0->Y > point1->Y)
+		{
+			int temp = point0->X;
+			point0->X = point1->X;
+			point1->X = temp;
+
+			temp = point0->Y;
+			point0->Y = point1->Y;
+			point1->Y = temp;
+		}
+
+		
+		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(point0->X, point0->Y, point1->X, point1->Y);
+
+		
+	}
+}
+
 void ActionsHandlers::RandomButtonClickHandler()
 {
 	Random^ rnd = gcnew Random();
@@ -166,7 +228,13 @@ void ActionsHandlers::RandomButtonClickHandler()
 			point1->X = rnd->Next(0, pictureBox->Width);
 			point1->Y = rnd->Next(0, pictureBox->Height);
 
-			brezDrawing->DrawLine(point0, point1, color);
+			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+			Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+
+			delete pictureBox->Image;
+			pictureBox->Image = result;
+
+			//delete currentImage;
 		}
 
 		if (choice == 2)
@@ -175,7 +243,14 @@ void ActionsHandlers::RandomButtonClickHandler()
 			point0->Y = rnd->Next(0, pictureBox->Height);
 			radius = rnd->Next(0, pictureBox->Height);
 
-			brezDrawing->DrawCircle(point0, radius, color);
+			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+			Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+
+			delete pictureBox->Image;
+			pictureBox->Image = result;
+
+			//delete currentImage;
+			
 		}
 
 		if (choice == 3)
@@ -185,7 +260,14 @@ void ActionsHandlers::RandomButtonClickHandler()
 			width = rnd->Next(0, pictureBox->Height);
 			height = rnd->Next(0, pictureBox->Height);
 
-			brezDrawing->DrawEllipse(point0, width, height, color);
+			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+			Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
+
+			delete pictureBox->Image;
+			pictureBox->Image = result;
+
+			//delete currentImage;
+			
 		}
 	}
 }
@@ -215,7 +297,15 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				point1->X = Int32::Parse(values[2]->Trim());
 				point1->Y = Int32::Parse(values[3]->Trim());
 
-				brezDrawing->DrawLine(point0, point1, color);
+				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+				Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+
+				delete pictureBox->Image;
+				pictureBox->Image = result;
+
+				//delete currentImage;
+
+				
 			}
 
 			if (String::Compare(figure, "circle") == 0)
@@ -224,7 +314,15 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				point0->Y = Int32::Parse(values[1]->Trim());
 				radius = Int32::Parse(values[2]->Trim());
 
-				brezDrawing->DrawCircle(point0, radius, color);
+				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+				Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+
+				delete pictureBox->Image;
+				pictureBox->Image = result;
+
+				//delete currentImage;
+
+				
 			}
 
 			if (String::Compare(figure, "ellipse") == 0)
@@ -234,7 +332,14 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				width = Int32::Parse(values[2]->Trim());
 				height = Int32::Parse(values[3]->Trim());
 
-				brezDrawing->DrawEllipse(point0, width, height, color);
+				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
+				Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
+
+				delete pictureBox->Image;
+				pictureBox->Image = result;
+
+				//delete currentImage;
+				
 			}
 		}
 		

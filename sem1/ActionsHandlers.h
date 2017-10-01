@@ -62,6 +62,8 @@ public:
 
 	void PolygonFillingAreaPictureBoxOnClickHandler(Point^ point);
 
+	void ClippingHandler(Point^ point);
+
 	void RandomButtonClickHandler();
 
 	void getObjectsFormFileClickHandler();

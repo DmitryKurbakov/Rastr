@@ -60,6 +60,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
 private: System::Windows::Forms::GroupBox^  colorGroupBox;
 private: System::Windows::Forms::Button^  colorButton;
+private: System::Windows::Forms::RadioButton^  ClippingRadioButton;
 
 
 
@@ -103,6 +104,7 @@ private:
 		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->colorGroupBox = (gcnew System::Windows::Forms::GroupBox());
 		this->colorButton = (gcnew System::Windows::Forms::Button());
+		this->ClippingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->objectsGroupBox->SuspendLayout();
 		this->pictureGroupBox->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->BeginInit();
@@ -114,7 +116,7 @@ private:
 		// clearButton
 		// 
 		this->clearButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
-		this->clearButton->Location = System::Drawing::Point(12, 413);
+		this->clearButton->Location = System::Drawing::Point(12, 419);
 		this->clearButton->Name = L"clearButton";
 		this->clearButton->Size = System::Drawing::Size(76, 30);
 		this->clearButton->TabIndex = 3;
@@ -124,6 +126,7 @@ private:
 		// 
 		// objectsGroupBox
 		// 
+		this->objectsGroupBox->Controls->Add(this->ClippingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->PolygonFillingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->ellipseRadioButton);
 		this->objectsGroupBox->Controls->Add(this->LineFillingRadioButton);
@@ -131,7 +134,7 @@ private:
 		this->objectsGroupBox->Controls->Add(this->lineRadioButton);
 		this->objectsGroupBox->Location = System::Drawing::Point(12, 31);
 		this->objectsGroupBox->Name = L"objectsGroupBox";
-		this->objectsGroupBox->Size = System::Drawing::Size(121, 136);
+		this->objectsGroupBox->Size = System::Drawing::Size(121, 159);
 		this->objectsGroupBox->TabIndex = 4;
 		this->objectsGroupBox->TabStop = false;
 		this->objectsGroupBox->Text = L"Object";
@@ -141,9 +144,9 @@ private:
 		this->PolygonFillingRadioButton->AutoSize = true;
 		this->PolygonFillingRadioButton->Location = System::Drawing::Point(10, 111);
 		this->PolygonFillingRadioButton->Name = L"PolygonFillingRadioButton";
-		this->PolygonFillingRadioButton->Size = System::Drawing::Size(63, 17);
+		this->PolygonFillingRadioButton->Size = System::Drawing::Size(92, 17);
 		this->PolygonFillingRadioButton->TabIndex = 4;
-		this->PolygonFillingRadioButton->Text = L"Polygon";
+		this->PolygonFillingRadioButton->Text = L"Polygon Filling";
 		this->PolygonFillingRadioButton->UseVisualStyleBackColor = true;
 		// 
 		// ellipseRadioButton
@@ -161,9 +164,9 @@ private:
 		this->LineFillingRadioButton->AutoSize = true;
 		this->LineFillingRadioButton->Location = System::Drawing::Point(10, 88);
 		this->LineFillingRadioButton->Name = L"LineFillingRadioButton";
-		this->LineFillingRadioButton->Size = System::Drawing::Size(45, 17);
+		this->LineFillingRadioButton->Size = System::Drawing::Size(74, 17);
 		this->LineFillingRadioButton->TabIndex = 3;
-		this->LineFillingRadioButton->Text = L"Line";
+		this->LineFillingRadioButton->Text = L"Line Filling";
 		this->LineFillingRadioButton->UseVisualStyleBackColor = true;
 		// 
 		// circleRadioButton
@@ -197,7 +200,7 @@ private:
 		this->pictureGroupBox->Controls->Add(this->pictureBox);
 		this->pictureGroupBox->Location = System::Drawing::Point(142, 31);
 		this->pictureGroupBox->Name = L"pictureGroupBox";
-		this->pictureGroupBox->Size = System::Drawing::Size(730, 428);
+		this->pictureGroupBox->Size = System::Drawing::Size(730, 418);
 		this->pictureGroupBox->TabIndex = 6;
 		this->pictureGroupBox->TabStop = false;
 		this->pictureGroupBox->Text = L"Picture";
@@ -210,7 +213,7 @@ private:
 		this->pictureBox->BackColor = System::Drawing::SystemColors::ControlLightLight;
 		this->pictureBox->Location = System::Drawing::Point(6, 19);
 		this->pictureBox->Name = L"pictureBox";
-		this->pictureBox->Size = System::Drawing::Size(718, 403);
+		this->pictureBox->Size = System::Drawing::Size(718, 393);
 		this->pictureBox->TabIndex = 0;
 		this->pictureBox->TabStop = false;
 		this->pictureBox->Click += gcnew System::EventHandler(this, &MyForm::pictureBox_Click);
@@ -219,7 +222,7 @@ private:
 		// 
 		this->settingsGroupBox->Controls->Add(this->objectsFromFileButton);
 		this->settingsGroupBox->Controls->Add(this->randomButton);
-		this->settingsGroupBox->Location = System::Drawing::Point(12, 232);
+		this->settingsGroupBox->Location = System::Drawing::Point(12, 301);
 		this->settingsGroupBox->Name = L"settingsGroupBox";
 		this->settingsGroupBox->Size = System::Drawing::Size(121, 77);
 		this->settingsGroupBox->TabIndex = 7;
@@ -273,7 +276,7 @@ private:
 		// colorGroupBox
 		// 
 		this->colorGroupBox->Controls->Add(this->colorButton);
-		this->colorGroupBox->Location = System::Drawing::Point(12, 173);
+		this->colorGroupBox->Location = System::Drawing::Point(12, 242);
 		this->colorGroupBox->Name = L"colorGroupBox";
 		this->colorGroupBox->Size = System::Drawing::Size(121, 53);
 		this->colorGroupBox->TabIndex = 2;
@@ -290,9 +293,19 @@ private:
 		this->colorButton->UseVisualStyleBackColor = true;
 		this->colorButton->Click += gcnew System::EventHandler(this, &MyForm::colorButton_Click);
 		// 
+		// ClippingRadioButton
+		// 
+		this->ClippingRadioButton->AutoSize = true;
+		this->ClippingRadioButton->Location = System::Drawing::Point(10, 134);
+		this->ClippingRadioButton->Name = L"ClippingRadioButton";
+		this->ClippingRadioButton->Size = System::Drawing::Size(62, 17);
+		this->ClippingRadioButton->TabIndex = 5;
+		this->ClippingRadioButton->Text = L"Clipping";
+		this->ClippingRadioButton->UseVisualStyleBackColor = true;
+		// 
 		// MyForm
 		// 
-		this->ClientSize = System::Drawing::Size(884, 455);
+		this->ClientSize = System::Drawing::Size(884, 461);
 		this->Controls->Add(this->colorGroupBox);
 		this->Controls->Add(this->settingsGroupBox);
 		this->Controls->Add(this->pictureGroupBox);

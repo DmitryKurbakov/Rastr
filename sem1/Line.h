@@ -12,9 +12,11 @@ private:
 public:
 
 	void SetPoint0(Point^ point0);
+	void SetPoint0(int x, int y);
 	Point^ GetPoint0();
 
 	void SetPoint1(Point^ point1);
+	void SetPoint1(int x, int y);
 	Point^ GetPoint1();
 
 	Line(Color c);

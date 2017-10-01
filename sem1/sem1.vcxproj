@@ -138,6 +138,7 @@
     <ClCompile Include="BresenhamAlgorithm.cpp" />
     <ClCompile Include="BresenhamDrawing.cpp" />
     <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="ClippingForm.cpp" />
     <ClCompile Include="Ellipse.cpp" />
     <ClCompile Include="GeometricObject.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -148,6 +149,9 @@
     <ClInclude Include="BresenhamAlgorithm.h" />
     <ClInclude Include="BresenhamDrawing.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="ClippingForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Ellipse.h" />
     <ClInclude Include="GeometricObject.h" />
     <ClInclude Include="Line.h" />
@@ -156,6 +160,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ClippingForm.resx">
+      <DependentUpon>ClippingForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>
