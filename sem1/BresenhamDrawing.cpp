@@ -38,7 +38,7 @@ Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Co
 
 	if (addToList)
 	{
-		Line^ line = gcnew Line(c);
+		Line^ line = gcnew Line(c, points);
 		line->SetPoint0(point0->X, point0->Y);
 		line->SetPoint1(point1->X, point1->Y);
 		geometricObjectList->Add(line);
@@ -383,7 +383,7 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 				}
 				else if ((outCodeOut & bottom) != 0)
 				{
-					x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
+					x = x0 + (x1 - x0) * (yB - 0) / (y1 - y0);
 					y = yB;
 				}
 				else if ((outCodeOut & right) != 0)

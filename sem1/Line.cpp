@@ -33,9 +33,20 @@ Point ^ Line::GetPoint1()
 }
 
 
-Line::Line(Color c)
+Line::Line(Color c, System::Collections::Generic::List<System::Tuple<int, int>^>^ points)
 {
 	color = c;
+
+	this->points = gcnew System::Collections::Generic::List<Point>();
+
+	for each (System::Tuple<int, int>^ tuple  in points)
+	{
+		Point tempPoint;
+		tempPoint.X = tuple->Item1;
+		tempPoint.Y = tuple->Item2;
+
+		this->points->Add(tempPoint);
+	}
 }
 
 Line::Line(Color c, int x0, int y0, int x1, int y1)
@@ -48,6 +59,40 @@ Line::Line(Color c, int x0, int y0, int x1, int y1)
 
 Line::~Line()
 {
+}
+
+void Line::getSubList(int x0, int x1)
+{
+	int xBeg = INT_MAX;
+	int xEnd = INT_MAX;
+
+	int indexMin;
+	int indexMax;
+
+	for (int i = 0; i < this->points->Count; i++)
+	{
+		int difXMin = System::Math::Abs(this->points[i].X - x0);
+		int difXMax = System::Math::Abs(this->points[i].X - x1);
+
+		if (difXMin < xBeg)
+		{
+			xBeg = difXMin;
+			indexMin = i;
+		}
+
+		if (difXMax < xEnd)
+		{
+			xEnd = difXMax;
+			indexMax = i;
+		}
+	}
+
+	points->RemoveRange(0, indexMin + 1);
+	indexMax = System::Math::Abs(indexMax - indexMin - 1);
+	points->RemoveRange(indexMax, points->Count - indexMax + 1);
+
+	SetPoint0(points[0]);
+	SetPoint1(points[points->Count - 1]);
 }
 
 
