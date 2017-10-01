@@ -5,7 +5,7 @@ using namespace System::Drawing;
 ref class GeometricObject
 {
 
-protected:
+public:
 	Color color;
 
 

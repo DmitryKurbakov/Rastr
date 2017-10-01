@@ -353,6 +353,10 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 	{
 		actionshandlers->PolygonFillingAreaPictureBoxOnClickHandler(cursor_point);
 	}
+	if (ClippingRadioButton->Checked)
+	{
+		actionshandlers->ClippingHandler(cursor_point);
+	}
 
 	delete cursor_point;
 }

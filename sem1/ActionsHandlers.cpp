@@ -25,6 +25,21 @@ ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox, Color c)
 	this->pictureBox->Image = bitmap;
 
 	IsDrawn = false;
+
+
+	clipForm = gcnew Form();
+	clipForm->Width = Math::Abs(point1->X - point0->X) + 11;
+	clipForm->Height = Math::Abs(point1->Y - point0->Y) + 11;
+	clipForm->Closed += gcnew System::EventHandler(this, &ActionsHandlers::OnClosed);
+
+	clipPictureBox = gcnew PictureBox();
+	clipPictureBox->Width = 800;// Math::Abs(point1->X - point0->X) + 1;
+	clipPictureBox->Height = 500;// Math::Abs(point1->Y - point0->Y) + 1;
+
+	clipForm->Controls->Add(clipPictureBox);
+
+	clipPictureBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left);
+
 }
 
 ActionsHandlers::ActionsHandlers()
@@ -64,7 +79,7 @@ void ActionsHandlers::LinePictureBoxOnClickHandler(Point^ point)
 	{
 
 		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-		Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+		Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color, true);
 
 		delete pictureBox->Image;
 		pictureBox->Image = result;
@@ -98,7 +113,7 @@ void ActionsHandlers::CirclePictureBoxOnClickHandler(Point^ point)
 	if (point0->X != -1 && point0->Y != -1 && radius != -1)
 	{
 		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-		Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+		Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color, true);
 
 		delete pictureBox->Image;
 		pictureBox->Image = result;
@@ -137,7 +152,7 @@ void ActionsHandlers::EllipsePictureBoxOnClickHandler(Point^ point)
 	if (point0->X != -1 && point0->Y != -1 && width != -1 && height != -1)
 	{
 		Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-		Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
+		Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color, true);
 
 		delete pictureBox->Image;
 		pictureBox->Image = result;
@@ -183,7 +198,7 @@ void ActionsHandlers::ClippingHandler(Point^ point)
 	//If values of all points were refreshed, transfer their to Drawing Layer 
 	if (point0->X != -1 && point0->Y != -1 && point1->X != -1 && point1->Y != -1)
 	{
-		if (point0->X > point1->X)
+		/*if (point0->X > point1->X)
 		{
 			int temp = point0->X;
 			point0->X = point1->X;
@@ -203,14 +218,42 @@ void ActionsHandlers::ClippingHandler(Point^ point)
 			temp = point0->Y;
 			point0->Y = point1->Y;
 			point1->Y = temp;
+		}*/
+
+		int xL, yT, xR, yB;
+
+		xL = point0->X < point1->X ? point0->X : point1->X;
+		yT = point0->Y < point1->Y ? point0->Y : point1->Y;
+		xR = point0->X > point1->X ? point0->X : point1->X;
+		yB = point0->Y > point1->Y ? point0->Y : point1->Y;
+
+		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(xL, yB, xR, yT);
+
+		Bitmap^ resultImage = gcnew Bitmap(1920, 1080);
+
+		for each (Line^ line in lines)
+		{
+			line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
+			line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
+			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), color, false);
 		}
 
-		
-		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(point0->X, point0->Y, point1->X, point1->Y);
+		//delete clipPictureBox->Image;
+		clipPictureBox->Image = resultImage;
+		clipForm->ShowDialog();
 
-		
+		point0->X = -1;
+		point0->Y = -1;
+		point1->X = -1;
+		point1->Y = -1;		
 	}
 }
+
+void ActionsHandlers::OnClosed(System::Object ^sender, System::EventArgs ^e)
+{
+	delete clipPictureBox->Image;
+}
+
 
 void ActionsHandlers::RandomButtonClickHandler()
 {
@@ -229,7 +272,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 			point1->Y = rnd->Next(0, pictureBox->Height);
 
 			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-			Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+			Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color, true);
 
 			delete pictureBox->Image;
 			pictureBox->Image = result;
@@ -244,7 +287,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 			radius = rnd->Next(0, pictureBox->Height);
 
 			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-			Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+			Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color, true);
 
 			delete pictureBox->Image;
 			pictureBox->Image = result;
@@ -261,7 +304,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 			height = rnd->Next(0, pictureBox->Height);
 
 			Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-			Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
+			Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color, true);
 
 			delete pictureBox->Image;
 			pictureBox->Image = result;
@@ -298,7 +341,7 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				point1->Y = Int32::Parse(values[3]->Trim());
 
 				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-				Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color);
+				Bitmap^ result = brezDrawing->DrawLine(currentImage, point0, point1, color, true);
 
 				delete pictureBox->Image;
 				pictureBox->Image = result;
@@ -315,7 +358,7 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				radius = Int32::Parse(values[2]->Trim());
 
 				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-				Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color);
+				Bitmap^ result = brezDrawing->DrawCircle(currentImage, point0, radius, color, true);
 
 				delete pictureBox->Image;
 				pictureBox->Image = result;
@@ -333,7 +376,7 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 				height = Int32::Parse(values[3]->Trim());
 
 				Bitmap^ currentImage = gcnew Bitmap(pictureBox->Image);
-				Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color);
+				Bitmap^ result = brezDrawing->DrawEllipse(currentImage, point0, width, height, color, true);
 
 				delete pictureBox->Image;
 				pictureBox->Image = result;
@@ -352,6 +395,8 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 			Console::WriteLine("problem reading file '{0}'", fileName);
 	}
 }
+
+
 
 
 

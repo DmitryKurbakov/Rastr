@@ -20,6 +20,7 @@ public:
 	Point^ GetPoint1();
 
 	Line(Color c);
+	Line(Color c, int x0, int y0, int x1, int y1);
 	~Line();
 
 };

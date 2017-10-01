@@ -38,15 +38,15 @@ public:
 
 	//Draw line in the PictureBox using two methods: Bresenham algorithm and Graphics.DrawLine(...)
 	//void DrawLine(int x0, int y0, int x1, int y1);
-	Bitmap^ DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Color c);
+	Bitmap^ DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Color c, bool addToList);
 
 	//Draw circle in the PictureBox using two methods: Bresenham algorithm and Graphics.DrawEllipse(...)
 	//void DrawCircle(int x0, int y0, int radius);
-	Bitmap^ DrawCircle(Bitmap^ bmp, Point^ center, int radius, Color c);
+	Bitmap^ DrawCircle(Bitmap^ bmp, Point^ center, int radius, Color c, bool addToList);
 
 	//Draw ellipse in the PictureBox using two methods: Bresenham algorithm and Graphics.DrawEllipse(...)
 	//void DrawEllipse(int x0, int y0, int width, int height);
-	Bitmap^ DrawEllipse(Bitmap^ bmp, Point^ center, int width, int height, Color c);
+	Bitmap^ DrawEllipse(Bitmap^ bmp, Point^ center, int width, int height, Color c, bool addToList);
 
 	Bitmap^ LineFillWithSeed(Bitmap^ bm, int x, int y, Color c);
 	Bitmap^ PolygonFill(Bitmap^ bmp, int x, int y, Color c);

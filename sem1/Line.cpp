@@ -38,6 +38,13 @@ Line::Line(Color c)
 	color = c;
 }
 
+Line::Line(Color c, int x0, int y0, int x1, int y1)
+{
+	color = c;
+	point0 = gcnew Point(x0, y0);
+	point1 = gcnew Point(x1, y1);
+}
+
 
 Line::~Line()
 {

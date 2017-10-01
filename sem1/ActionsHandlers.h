@@ -16,6 +16,9 @@ ref class ActionsHandlers
 
 private:
 	
+	Form^ clipForm;
+	PictureBox^ clipPictureBox;
+
 	//Reference to the Graphics layer object
 	BresenhamDrawing^ brezDrawing;
 
@@ -67,6 +70,7 @@ public:
 	void RandomButtonClickHandler();
 
 	void getObjectsFormFileClickHandler();
+	void OnClosed(System::Object ^sender, System::EventArgs ^e);
 };
 
 

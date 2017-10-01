@@ -19,7 +19,7 @@ System::Windows::Forms::PictureBox ^ BresenhamDrawing::getPictureBox()
 }
 
 
-Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Color c)
+Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Color c, bool addToList)
 {
 
 	////Draw line using the Graphics method with red pen
@@ -34,10 +34,15 @@ Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Co
 
 	//Draw line using the Bresenham method with black pen
 	BresenhamLine(point0->X, point0->Y, point1->X, point1->Y);
-	Line^ line = gcnew Line(c);
-	line->SetPoint0(point0);
-	line->SetPoint1(point1);
-	geometricObjectList->Add(line);
+
+	if (addToList)
+	{
+		Line^ line = gcnew Line(c);
+		line->SetPoint0(point0->X, point0->Y);
+		line->SetPoint1(point1->X, point1->Y);
+		geometricObjectList->Add(line);
+	}	
+
 	return Draw(bmp, c);
 
 	/*delete bitmap;
@@ -46,7 +51,7 @@ Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Co
 }
 
 
-Bitmap^ BresenhamDrawing::DrawCircle(Bitmap^ bmp, Point^ center, int radius, Color c)
+Bitmap^ BresenhamDrawing::DrawCircle(Bitmap^ bmp, Point^ center, int radius, Color c, bool addToList)
 {
 	//Draw cirle using the Graphics method with red pen
 	/*Bitmap^ bitmap = gcnew Bitmap(pictureBox->Image);
@@ -61,10 +66,17 @@ Bitmap^ BresenhamDrawing::DrawCircle(Bitmap^ bmp, Point^ center, int radius, Col
 
 	//Draw cirle using the Bresenham method with black pen
 	BresenhamCircle(center->X, center->Y, radius);
-	Circle^ circle = gcnew Circle(c);
-	circle->SetPoint0(center);
-	circle->SetRadius(radius);
-	geometricObjectList->Add(circle);
+
+	if (addToList)
+	{
+
+		Circle^ circle = gcnew Circle(c);
+		circle->SetPoint0(center);
+		circle->SetRadius(radius);
+		geometricObjectList->Add(circle);
+
+	}
+	
 	return Draw(bmp, c);
 
 	/*delete bitmap;
@@ -72,7 +84,7 @@ Bitmap^ BresenhamDrawing::DrawCircle(Bitmap^ bmp, Point^ center, int radius, Col
 	delete redPen;*/
 }
 
-Bitmap^ BresenhamDrawing::DrawEllipse(Bitmap^ bmp, Point^ center, int width, int height, Color c)
+Bitmap^ BresenhamDrawing::DrawEllipse(Bitmap^ bmp, Point^ center, int width, int height, Color c, bool addToList)
 {
 
 	//Draw cirle using the Graphics method with red pen
@@ -87,11 +99,16 @@ Bitmap^ BresenhamDrawing::DrawEllipse(Bitmap^ bmp, Point^ center, int width, int
 
 	//Draw cirle using the Graphics method with green pen
 	BresenhamEllipse(center->X, center->Y, width, height);
-	Ellipse^ ellipse = gcnew Ellipse(c);
+	
+	if (addToList)
+	{
+		Ellipse^ ellipse = gcnew Ellipse(c);
 	ellipse->SetPoint0(center);
 	ellipse->SetWidth(width);
 	ellipse->SetHeight(height);
 	geometricObjectList->Add(ellipse);
+	}
+	
 	return Draw(bmp, c);
 
 	/*delete bitmap;
@@ -311,7 +328,11 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 	{
 		if (it->GetType()->ToString()->CompareTo("Line") == 0)
 		{
-			lines->Add((Line^)it);
+			Line^ line = gcnew Line(it->color, 
+				((Line^)it)->GetPoint0()->X, ((Line^)it)->GetPoint0()->Y,
+				((Line^)it)->GetPoint1()->X, ((Line^)it)->GetPoint1()->Y);
+
+			lines->Add(line);
 		}
 	}
 
@@ -321,7 +342,7 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 	int bottom = 4;
 	int top = 8;
 
-	for each (Line^ line in lines)
+	for each (Line^ line in lines->ToArray())
 	{
 		int x0 = line->GetPoint0()->X;
 		int y0 = line->GetPoint0()->Y;
