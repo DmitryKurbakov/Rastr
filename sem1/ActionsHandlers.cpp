@@ -235,12 +235,24 @@ void ActionsHandlers::ClippingHandler(Point^ point)
 		{
 			//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
 			//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
-			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), color, false);
+			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
 		}
 
 		//delete clipPictureBox->Image;
-		clipPictureBox->Image = resultImage;
-		clipForm->ShowDialog();
+		//clipPictureBox->Image = resultImage;
+		//clipForm->ShowDialog();
+
+		delete pictureBox->Image;
+		pictureBox->Image = resultImage;
+
+		
+		Graphics^ gr = Graphics::FromImage(pictureBox->Image);
+
+		Pen^ pen = gcnew Pen(Brushes::Red);
+		gr->DrawRectangle(pen, xL, yT, xR - xL, yB - yT);
+		
+		delete pen;
+		delete gr;
 
 		point0->X = -1;
 		point0->Y = -1;

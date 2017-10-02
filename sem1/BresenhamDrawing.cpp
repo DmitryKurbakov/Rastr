@@ -200,7 +200,7 @@ Bitmap^ BresenhamDrawing::LineFillWithSeed(Bitmap^ bm, int x, int y, Color c)
 
 		tmpX = xleft;
 		tmpY = p->Y - 1;
-		while (tmpX <= xright && tmpY >= 0)
+		while (tmpX <= xright && tmpY > 0)
 		{
 			bool flag = false;
 			while (bm->GetPixel(tmpX, tmpY).ToArgb() == argb && bm->GetPixel(tmpX, tmpY).ToArgb() != c.ToArgb() && tmpX < xright)
@@ -371,7 +371,7 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 
 			else
 			{
-				int x, y;
+				float x, y;
 
 				int outCodeOut = (outcode0 != 0) ? outcode0 : outcode1;
 
@@ -383,7 +383,7 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 				}
 				else if ((outCodeOut & bottom) != 0)
 				{
-					x = x0 + (x1 - x0) * (yB - 0) / (y1 - y0);
+					x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
 					y = yB;
 				}
 				else if ((outCodeOut & right) != 0)
@@ -391,7 +391,7 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 					y = y0 + (y1 - y0) * (xR - x0) / (x1 - x0);
 					x = xR;
 				}
-				else if ((outCodeOut & xL) != 0)
+				else if ((outCodeOut & left) != 0)
 				{
 					y = y0 + (y1 - y0) * (xL - x0) / (x1 - x0);
 					x = xL;
