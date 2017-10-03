@@ -367,21 +367,11 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 	return resultBitmap;
 }
 
-System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT, int xR, int yB)
+System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT, int xR, int yB, bool isColorful)
 {
 	System::Collections::Generic::List<Line^>^ lines = gcnew System::Collections::Generic::List<Line^>();
 
-	for each (GeometricObject^ it in geometricObjectList)
-	{
-		if (it->GetType()->ToString()->CompareTo("Line") == 0)
-		{
-			Line^ line = gcnew Line(it->color, 
-				((Line^)it)->GetPoint0()->X, ((Line^)it)->GetPoint0()->Y,
-				((Line^)it)->GetPoint1()->X, ((Line^)it)->GetPoint1()->Y);
-
-			lines->Add(line);
-		}
-	}
+	lines = GetLines();
 
 	int inside = 0;
 	int left = 1;
@@ -401,75 +391,97 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 		int outcode1 = ComputeOutCode(xL, yT, xR, yB, x1, y1);
 		bool accept = false;
 
-
 		while (true)
 		{
 			if ((outcode0 | outcode1) == 0)
 			{
 				accept = true;
+
+				if (isColorful)
+				{
+					line->color = Color::Green;
+				}
+
 				break;
 			}
 			else if ((outcode0 & outcode1) != 0)
 			{
-				lines->Remove(line);
+				line->color = Color::Orange;
+
+				if (!isColorful)
+				{
+					lines->Remove(line);
+				}	
+				
 				break;
 			}
 
-			else
+			else 
 			{
-				float x, y;
-
-				int outCodeOut = (outcode0 != 0) ? outcode0 : outcode1;
-
-
-				if ((outCodeOut & top) != 0)
+				if (isColorful)
 				{
-					x = x0 + (x1 - x0) * (yT - y0) / (y1 - y0);
-					y = yT;
-				}
-				else if ((outCodeOut & bottom) != 0)
-				{
-					x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
-					y = yB;
-				}
-				else if ((outCodeOut & right) != 0)
-				{
-					y = y0 + (y1 - y0) * (xR - x0) / (x1 - x0);
-					x = xR;
-				}
-				else if ((outCodeOut & left) != 0)
-				{
-					y = y0 + (y1 - y0) * (xL - x0) / (x1 - x0);
-					x = xL;
+					line->color = Color::Blue;
+					break;
 				}
 				else
 				{
-					x = NULL;
-					y = NULL;
-				}
+					float x, y;
+
+					int outCodeOut = (outcode0 != 0) ? outcode0 : outcode1;
 
 
-				if (outCodeOut == outcode0)
-				{
-					line->SetPoint0(x, y);
+					if ((outCodeOut & top) != 0)
+					{
+						x = x0 + (x1 - x0) * (yT - y0) / (y1 - y0);
+						y = yT;
+					}
+					else if ((outCodeOut & bottom) != 0)
+					{
+						x = x0 + (x1 - x0) * (yB - y0) / (y1 - y0);
+						y = yB;
+					}
+					else if ((outCodeOut & right) != 0)
+					{
+						y = y0 + (y1 - y0) * (xR - x0) / (x1 - x0);
+						x = xR;
+					}
+					else if ((outCodeOut & left) != 0)
+					{
+						y = y0 + (y1 - y0) * (xL - x0) / (x1 - x0);
+						x = xL;
+					}
+					else
+					{
+						x = NULL;
+						y = NULL;
+					}
 
-					x0 = x;
-					y0 = y;
 
-					outcode0 = ComputeOutCode(xL, yT, xR, yB, x0, y0);
-				}
-				else
-				{
-					line->SetPoint1(x, y);
+					if (outCodeOut == outcode0)
+					{
+						line->SetPoint0(x, y);
 
-					x1 = x;
-					y1 = y;
+						x0 = x;
+						y0 = y;
 
-					outcode1 = ComputeOutCode(xL, yT, xR, yB, x1, y1);
+						outcode0 = ComputeOutCode(xL, yT, xR, yB, x0, y0);
+					}
+					else
+					{
+						line->SetPoint1(x, y);
+
+						x1 = x;
+						y1 = y;
+
+						outcode1 = ComputeOutCode(xL, yT, xR, yB, x1, y1);
+					}
 				}
 			}
+			
 		}
+
 	}
+
 
 	return lines;
 }

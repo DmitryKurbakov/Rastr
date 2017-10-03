@@ -55,7 +55,7 @@ public:
 	Bitmap^ LineFillWithSeed(Bitmap^ bm, int x, int y, Color c);
 	Bitmap^ PolygonFill(Bitmap^ bmp, int x, int y, Color c);
 
-	System::Collections::Generic::List<Line^>^ Clip(int x0, int y0, int x1, int y1);
+	System::Collections::Generic::List<Line^>^ Clip(int x0, int y0, int x1, int y1, bool isColorful);
 	System::Collections::Generic::List<Line^>^ GetLines();
 
 	void RemoveUnusedObjects(int x, int y);

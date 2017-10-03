@@ -337,7 +337,7 @@ private:
 		this->clippingComboBox->Name = L"clippingComboBox";
 		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
 		this->clippingComboBox->TabIndex = 6;
-		this->clippingComboBox->SelectedIndex = 2;
+		this->clippingComboBox->SelectedIndex = 0;
 		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
 		// 
 		// MyForm

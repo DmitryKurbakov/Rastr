@@ -238,31 +238,27 @@ void ActionsHandlers::ClippingHandler(Point^ point, int itemIndex)
 		if (itemIndex == 0)
 		{
 			lines = brezDrawing->GetLines();
-			for each (Line^ line in lines)
-			{
-				//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
-				//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
-				resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
-			}
+		}
 
-			delete pictureBox->Image;
-			pictureBox->Image = resultImage;
+		if (itemIndex == 1)
+		{
+			lines = brezDrawing->Clip(xL, yT, xR, yB, true);
 		}
 
 		if (itemIndex == 2)
 		{
-			lines = brezDrawing->Clip(xL, yT, xR, yB);
-			for each (Line^ line in lines)
-			{
-				//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
-				//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
-				resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
-			}
-
-			delete pictureBox->Image;
-			pictureBox->Image = resultImage;
+			lines = brezDrawing->Clip(xL, yT, xR, yB, false);
 		}
 
+		for each (Line^ line in lines)
+		{
+			//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
+			//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
+			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
+		}
+
+		delete pictureBox->Image;
+		pictureBox->Image = resultImage;
 		
 		
 		//delete clipPictureBox->Image;
