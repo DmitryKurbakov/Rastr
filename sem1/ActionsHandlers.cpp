@@ -384,6 +384,14 @@ void ActionsHandlers::RandomButtonClickHandler()
 			
 		}
 	}
+
+	point0->X = -1;
+	point0->Y = -1;
+	point1->X = -1;
+	point1->Y = -1;
+	radius = -1;
+	width = -1;
+	height = -1;
 }
 
 void ActionsHandlers::getObjectsFormFileClickHandler()
@@ -465,6 +473,14 @@ void ActionsHandlers::getObjectsFormFileClickHandler()
 		else
 			Console::WriteLine("problem reading file '{0}'", fileName);
 	}
+
+	point0->X = -1;
+	point0->Y = -1;
+	point1->X = -1;
+	point1->Y = -1;
+	radius = -1;
+	width = -1;
+	height = -1;
 }
 
 

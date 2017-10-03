@@ -35,6 +35,7 @@ public:
 	{
 		InitializeComponent();
 		actionshandlers = gcnew ActionsHandlers(this->pictureBox, Color::Black, backgroundColor);	//init controller;
+		backgroundColor = pictureBox->BackColor;
 	}
 
 
@@ -56,7 +57,7 @@ private: System::Windows::Forms::RadioButton^  LineFillingRadioButton;
 private: System::Windows::Forms::RadioButton^  PolygonFillingRadioButton;
 private: System::Windows::Forms::ColorDialog^  colorDialog;
 private: System::Windows::Forms::MenuStrip^  menuStrip;
-private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
+
 private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
 private: System::Windows::Forms::GroupBox^  colorGroupBox;
 private: System::Windows::Forms::Button^  colorButton;
@@ -65,6 +66,11 @@ private: System::Windows::Forms::ComboBox^  clippingComboBox;
 
 private: System::Windows::Forms::Button^  clearButton;
 private: System::Windows::Forms::Button^  backgroundColorButton;
+
+
+
+
+
 private: Color backgroundColor;
 	
 
@@ -101,7 +107,6 @@ private:
 		this->randomButton = (gcnew System::Windows::Forms::Button());
 		this->colorDialog = (gcnew System::Windows::Forms::ColorDialog());
 		this->menuStrip = (gcnew System::Windows::Forms::MenuStrip());
-		this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->colorGroupBox = (gcnew System::Windows::Forms::GroupBox());
 		this->backgroundColorButton = (gcnew System::Windows::Forms::Button());
@@ -154,7 +159,6 @@ private:
 		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
 		this->clippingComboBox->TabIndex = 6;
 		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
-		this->clippingComboBox->SelectedIndex = 0;
 		// 
 		// ClippingRadioButton
 		// 
@@ -185,7 +189,7 @@ private:
 		this->ellipseRadioButton->Name = L"ellipseRadioButton";
 		this->ellipseRadioButton->Size = System::Drawing::Size(62, 17);
 		this->ellipseRadioButton->TabIndex = 2;
-		this->ellipseRadioButton->Text = L"Еллипс";
+		this->ellipseRadioButton->Text = L"Эллипс";
 		this->ellipseRadioButton->UseVisualStyleBackColor = true;
 		this->ellipseRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
@@ -250,7 +254,6 @@ private:
 		this->pictureBox->TabIndex = 0;
 		this->pictureBox->TabStop = false;
 		this->pictureBox->Click += gcnew System::EventHandler(this, &MyForm::pictureBox_Click);
-		backgroundColor = pictureBox->BackColor;
 		// 
 		// settingsGroupBox
 		// 
@@ -285,27 +288,19 @@ private:
 		// 
 		// menuStrip
 		// 
-		this->menuStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-			this->fileToolStripMenuItem,
-				this->aboutToolStripMenuItem
-		});
+		this->menuStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
 		this->menuStrip->Location = System::Drawing::Point(0, 0);
 		this->menuStrip->Name = L"menuStrip";
 		this->menuStrip->Size = System::Drawing::Size(884, 24);
 		this->menuStrip->TabIndex = 8;
 		this->menuStrip->Text = L"menuStrip1";
 		// 
-		// fileToolStripMenuItem
-		// 
-		this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-		this->fileToolStripMenuItem->Size = System::Drawing::Size(48, 20);
-		this->fileToolStripMenuItem->Text = L"Файл";
-		// 
 		// aboutToolStripMenuItem
 		// 
 		this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
 		this->aboutToolStripMenuItem->Size = System::Drawing::Size(94, 20);
 		this->aboutToolStripMenuItem->Text = L"О программе";
+		this->aboutToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::aboutToolStripMenuItem_Click);
 		// 
 		// colorGroupBox
 		// 
@@ -409,10 +404,23 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 	}
 	private: System::Void randomButton_Click(System::Object^  sender, System::EventArgs^  e) {
 
+		if (ClippingRadioButton->Checked)
+		{
+			actionshandlers->onClippingComboBoxChange();
+		}
+
+		backgroundColorButton->Enabled = false;
 		actionshandlers->RandomButtonClickHandler();
 
 	}
 	private: System::Void objectsFromFileButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		if (ClippingRadioButton->Checked)
+		{
+			actionshandlers->onClippingComboBoxChange();
+		}
+
+		backgroundColorButton->Enabled = false;
 		actionshandlers->getObjectsFormFileClickHandler();
 	}
 
@@ -433,6 +441,9 @@ private: System::Void backgroundColorButton_Click(System::Object^  sender, Syste
 		pictureBox->BackColor = colorDialog->Color;
 		actionshandlers->backgroundColor = colorDialog->Color;
 	}
+}
+private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	MessageBox::Show("Семинар 2. Заливка, отсечение\nКурбаков Дмитрий Сергеевич, БПИ143\nНа панели Инструменты представлена реализация необходимых объектов для рисования. После выбора инструмента необходимо совершить серию нажатий на панеле Изображение\nVisual Studio 2017");
 }
 };
 
