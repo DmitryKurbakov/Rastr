@@ -367,6 +367,30 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 	return resultBitmap;
 }
 
+
+Bitmap ^ BresenhamDrawing::DrawObjectsByPoints(Bitmap^ inputBitmap, Color back)
+{
+	Bitmap^ resultBitmap = gcnew Bitmap(inputBitmap->Width, inputBitmap->Height);
+	Graphics^ graphics = Graphics::FromImage(resultBitmap);
+	graphics->Clear(back);
+
+	for each (GeometricObject^ go in geometricObjectList)
+	{
+		for each (Point p in go->points)
+		{
+			if (!IsBorder(resultBitmap, p.X, p.Y))
+			{
+				resultBitmap->SetPixel(p.X, p.Y, go->color);
+			}
+			
+		}
+	}
+
+	delete graphics;
+
+	return resultBitmap;
+}
+
 System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT, int xR, int yB, bool isColorful)
 {
 	System::Collections::Generic::List<Line^>^ lines = gcnew System::Collections::Generic::List<Line^>();

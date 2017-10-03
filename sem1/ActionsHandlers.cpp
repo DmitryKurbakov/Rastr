@@ -5,11 +5,12 @@ void ActionsHandlers::SetColor(Color c)
 	this->color = c;
 }
 
-ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox, Color c)
+ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox, Color c, Color backColor)
 {
 
 	brezDrawing = gcnew BresenhamDrawing(pictureBox);
 	color = c;
+	backgroundColor = backColor;
 
 	//The default Values for all geometric objects variables are "-1"
 	this->point0 = gcnew Point(-1, -1);
@@ -301,7 +302,27 @@ void ActionsHandlers::OnCheckedChange()
 
 void ActionsHandlers::onClippingComboBoxChange()
 {
-	
+	/*Graphics^ gr = Graphics::FromImage(pictureBox->Image);
+
+	Pen^ pen = gcnew Pen(backgroundColor);
+
+	gr->DrawRectangle(pen, xL, yT, xR - xL, yB - yT);
+
+	pictureBox->Refresh();*/
+
+	xL = -1;
+	yT = -1;
+	xR = -1;
+	yB = -1;
+
+	/*delete gr;
+	delete pen;*/
+
+	Bitmap^ inputBitmap = gcnew Bitmap(pictureBox->Image);
+	delete pictureBox->Image;
+	pictureBox->Image = brezDrawing->DrawObjectsByPoints(inputBitmap, backgroundColor);
+
+	delete inputBitmap;
 }
 
 

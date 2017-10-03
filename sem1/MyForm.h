@@ -34,7 +34,7 @@ public:
 	MyForm(void)
 	{
 		InitializeComponent();
-		actionshandlers = gcnew ActionsHandlers(this->pictureBox, Color::Black);	//init controller;
+		actionshandlers = gcnew ActionsHandlers(this->pictureBox, Color::Black, backgroundColor);	//init controller;
 	}
 
 
@@ -63,24 +63,9 @@ private: System::Windows::Forms::Button^  colorButton;
 private: System::Windows::Forms::RadioButton^  ClippingRadioButton;
 private: System::Windows::Forms::ComboBox^  clippingComboBox;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 private: System::Windows::Forms::Button^  clearButton;
-//private:
+private: System::Windows::Forms::Button^  backgroundColorButton;
+private: Color backgroundColor;
 	
 
 protected:
@@ -102,6 +87,7 @@ private:
 	{
 		this->clearButton = (gcnew System::Windows::Forms::Button());
 		this->objectsGroupBox = (gcnew System::Windows::Forms::GroupBox());
+		this->clippingComboBox = (gcnew System::Windows::Forms::ComboBox());
 		this->ClippingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->PolygonFillingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->ellipseRadioButton = (gcnew System::Windows::Forms::RadioButton());
@@ -118,8 +104,8 @@ private:
 		this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->colorGroupBox = (gcnew System::Windows::Forms::GroupBox());
+		this->backgroundColorButton = (gcnew System::Windows::Forms::Button());
 		this->colorButton = (gcnew System::Windows::Forms::Button());
-		this->clippingComboBox = (gcnew System::Windows::Forms::ComboBox());
 		this->objectsGroupBox->SuspendLayout();
 		this->pictureGroupBox->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->BeginInit();
@@ -150,10 +136,25 @@ private:
 		this->objectsGroupBox->Controls->Add(this->lineRadioButton);
 		this->objectsGroupBox->Location = System::Drawing::Point(12, 31);
 		this->objectsGroupBox->Name = L"objectsGroupBox";
-		this->objectsGroupBox->Size = System::Drawing::Size(160, 213);
+		this->objectsGroupBox->Size = System::Drawing::Size(160, 191);
 		this->objectsGroupBox->TabIndex = 4;
 		this->objectsGroupBox->TabStop = false;
 		this->objectsGroupBox->Text = L"Инструменты";
+		// 
+		// clippingComboBox
+		// 
+		this->clippingComboBox->Enabled = false;
+		this->clippingComboBox->FormattingEnabled = true;
+		this->clippingComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(3) {
+			L"Окно и отрезки целиком", L"Разным цветом",
+				L"Окно и видимые части отрезков"
+		});
+		this->clippingComboBox->Location = System::Drawing::Point(20, 157);
+		this->clippingComboBox->Name = L"clippingComboBox";
+		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
+		this->clippingComboBox->TabIndex = 6;
+		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
+		this->clippingComboBox->SelectedIndex = 0;
 		// 
 		// ClippingRadioButton
 		// 
@@ -249,17 +250,18 @@ private:
 		this->pictureBox->TabIndex = 0;
 		this->pictureBox->TabStop = false;
 		this->pictureBox->Click += gcnew System::EventHandler(this, &MyForm::pictureBox_Click);
+		backgroundColor = pictureBox->BackColor;
 		// 
 		// settingsGroupBox
 		// 
 		this->settingsGroupBox->Controls->Add(this->objectsFromFileButton);
 		this->settingsGroupBox->Controls->Add(this->randomButton);
-		this->settingsGroupBox->Location = System::Drawing::Point(10, 358);
+		this->settingsGroupBox->Location = System::Drawing::Point(12, 324);
 		this->settingsGroupBox->Name = L"settingsGroupBox";
 		this->settingsGroupBox->Size = System::Drawing::Size(158, 77);
 		this->settingsGroupBox->TabIndex = 7;
 		this->settingsGroupBox->TabStop = false;
-		this->settingsGroupBox->Text = L"Объекты";
+		this->settingsGroupBox->Text = L"Опции";
 		// 
 		// objectsFromFileButton
 		// 
@@ -307,13 +309,24 @@ private:
 		// 
 		// colorGroupBox
 		// 
+		this->colorGroupBox->Controls->Add(this->backgroundColorButton);
 		this->colorGroupBox->Controls->Add(this->colorButton);
-		this->colorGroupBox->Location = System::Drawing::Point(10, 299);
+		this->colorGroupBox->Location = System::Drawing::Point(12, 228);
 		this->colorGroupBox->Name = L"colorGroupBox";
-		this->colorGroupBox->Size = System::Drawing::Size(160, 53);
+		this->colorGroupBox->Size = System::Drawing::Size(160, 90);
 		this->colorGroupBox->TabIndex = 2;
 		this->colorGroupBox->TabStop = false;
 		this->colorGroupBox->Text = L"Цвет";
+		// 
+		// backgroundColorButton
+		// 
+		this->backgroundColorButton->Location = System::Drawing::Point(8, 49);
+		this->backgroundColorButton->Name = L"backgroundColorButton";
+		this->backgroundColorButton->Size = System::Drawing::Size(104, 23);
+		this->backgroundColorButton->TabIndex = 1;
+		this->backgroundColorButton->Text = L"Фон";
+		this->backgroundColorButton->UseVisualStyleBackColor = true;
+		this->backgroundColorButton->Click += gcnew System::EventHandler(this, &MyForm::backgroundColorButton_Click);
 		// 
 		// colorButton
 		// 
@@ -321,24 +334,9 @@ private:
 		this->colorButton->Name = L"colorButton";
 		this->colorButton->Size = System::Drawing::Size(104, 23);
 		this->colorButton->TabIndex = 0;
-		this->colorButton->Text = L"Выбрать цвет";
+		this->colorButton->Text = L"Объект";
 		this->colorButton->UseVisualStyleBackColor = true;
 		this->colorButton->Click += gcnew System::EventHandler(this, &MyForm::colorButton_Click);
-		// 
-		// clippingComboBox
-		// 
-		this->clippingComboBox->Enabled = false;
-		this->clippingComboBox->FormattingEnabled = true;
-		this->clippingComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(3) {
-			L"Окно и отрезки целиком", L"Разным цветом",
-				L"Окно и видимые части отрезков"
-		});
-		this->clippingComboBox->Location = System::Drawing::Point(20, 157);
-		this->clippingComboBox->Name = L"clippingComboBox";
-		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
-		this->clippingComboBox->TabIndex = 6;
-		this->clippingComboBox->SelectedIndex = 0;
-		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
 		// 
 		// MyForm
 		// 
@@ -367,6 +365,8 @@ private:
 #pragma endregion
 
 private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
+
+	backgroundColorButton->Enabled = false;
 
 	Point^ cursor_point = pictureBox->PointToClient(System::Windows::Forms::Cursor::Position);
 
@@ -398,10 +398,14 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 	delete cursor_point;
 }
 	private: System::Void clearButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		pictureBox->BackColor = Color::White;
+		backgroundColor = Color::White;
+		backgroundColorButton->Enabled = true;
 		delete pictureBox->Image;
 		delete actionshandlers;
 
-		actionshandlers = gcnew ActionsHandlers(pictureBox, Color::Black);
+		actionshandlers = gcnew ActionsHandlers(pictureBox, Color::Black, backgroundColor);
 	}
 	private: System::Void randomButton_Click(System::Object^  sender, System::EventArgs^  e) {
 
@@ -422,6 +426,14 @@ private: System::Void colorButton_Click(System::Object^  sender, System::EventAr
 		 void OnCheckedChanged(System::Object ^sender, System::EventArgs ^e);
 		 void OnSelectedIndexChanged(System::Object ^sender, System::EventArgs ^e);
 		 void OnClippingCheckedChanged(System::Object ^sender, System::EventArgs ^e);
+private: System::Void backgroundColorButton_Click(System::Object^  sender, System::EventArgs^  e) 
+{
+	if (colorDialog->ShowDialog() == ::System::Windows::Forms::DialogResult::OK)
+	{
+		pictureBox->BackColor = colorDialog->Color;
+		actionshandlers->backgroundColor = colorDialog->Color;
+	}
+}
 };
 
 
@@ -434,15 +446,21 @@ void MyForm::OnCheckedChanged(System::Object ^sender, System::EventArgs ^e)
 
 void MyForm::OnSelectedIndexChanged(System::Object ^sender, System::EventArgs ^e)
 {
-	
-	actionshandlers->ClippingHandler(actionshandlers->point0, clippingComboBox->SelectedIndex);
-
-	
+	if (ClippingRadioButton->Checked)
+	{
+		actionshandlers->ClippingHandler(actionshandlers->point0, clippingComboBox->SelectedIndex);
+	}	
 }
 
 
 void MyForm::OnClippingCheckedChanged(System::Object ^sender, System::EventArgs ^e)
 {
-	clippingComboBox->Enabled = true;
-	actionshandlers->onClippingComboBoxChange();
+	if (ClippingRadioButton->Checked)
+	{
+		clippingComboBox->Enabled = true;
+	}	
+	else
+	{
+		actionshandlers->onClippingComboBoxChange();
+	}
 }

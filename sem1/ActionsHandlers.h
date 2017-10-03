@@ -29,6 +29,7 @@ private:
 
 public:
 
+	Color backgroundColor;
 	//------------------------------------------------------------------
 	//Geometric Objects Variables
 	//------------------------------------------------------------------
@@ -48,7 +49,7 @@ public:
 
 	int xL = -1, yT = -1, xR = -1, yB = -1;
 
-	ActionsHandlers(PictureBox^ pictureBox, Color c);
+	ActionsHandlers(PictureBox^ pictureBox, Color c, Color backColor);
 	ActionsHandlers();
 	~ActionsHandlers();
 
