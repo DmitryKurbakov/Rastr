@@ -12,7 +12,7 @@
 //	Реализация эллипса
 //	Управление мышью
 //
-//https://github.com/DmitryKurbakov/Bresenham
+//https://github.com/DmitryKurbakov/Rastr
 
 #include "ActionsHandlers.h"
 
@@ -159,6 +159,7 @@ private:
 		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
 		this->clippingComboBox->TabIndex = 6;
 		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
+		this->clippingComboBox->SelectedIndex = 0;
 		// 
 		// ClippingRadioButton
 		// 
