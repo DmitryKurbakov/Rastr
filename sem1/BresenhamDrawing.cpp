@@ -38,10 +38,11 @@ Bitmap^ BresenhamDrawing::DrawLine(Bitmap^ bmp, Point^ point0, Point^ point1, Co
 
 	if (addToList)
 	{
-		Line^ line = gcnew Line(c, points);
+		Line^ line = gcnew Line(c);
 		line->SetPoint0(point0->X, point0->Y);
 		line->SetPoint1(point1->X, point1->Y);
 		geometricObjectList->Add(line);
+		line->SetPoints(points);
 	}	
 
 	return Draw(bmp, c);
@@ -72,10 +73,10 @@ Bitmap^ BresenhamDrawing::DrawCircle(Bitmap^ bmp, Point^ center, int radius, Col
 	{
 
 		Circle^ circle = gcnew Circle(c);
-		circle->SetPoint0(center);
+		circle->SetPoint0(center->X, center->Y);
 		circle->SetRadius(radius);
 		geometricObjectList->Add(circle);
-
+		circle->SetPoints(points);
 	}
 	
 	return Draw(bmp, c);
@@ -104,10 +105,11 @@ Bitmap^ BresenhamDrawing::DrawEllipse(Bitmap^ bmp, Point^ center, int width, int
 	if (addToList)
 	{
 		Ellipse^ ellipse = gcnew Ellipse(c);
-	ellipse->SetPoint0(center);
-	ellipse->SetWidth(width);
-	ellipse->SetHeight(height);
-	geometricObjectList->Add(ellipse);
+		ellipse->SetPoint0(center->X, center->Y);
+		ellipse->SetWidth(width);
+		ellipse->SetHeight(height);
+		geometricObjectList->Add(ellipse);
+		ellipse->SetPoints(points);
 	}
 	
 	return Draw(bmp, c);
@@ -118,9 +120,8 @@ Bitmap^ BresenhamDrawing::DrawEllipse(Bitmap^ bmp, Point^ center, int width, int
 }
 
 Bitmap^ BresenhamDrawing::LineFillWithSeed(Bitmap^ bm, int x, int y, Color c)
-{
+{	
 	Stack^ pts = gcnew Stack();
-	//std::stack<Point> pts;
 	Point^ prime = gcnew Point();
 	prime->X = x; 
 	prime->Y = y;
@@ -243,12 +244,18 @@ Bitmap^ BresenhamDrawing::LineFillWithSeed(Bitmap^ bm, int x, int y, Color c)
 
 Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 {
+	
+	//geometricObjectListForPolygonFilling = gcnew System::Collections::Generic::List<GeometricObject^>();
+
+	Bitmap^ resultBitmap = gcnew Bitmap(bmp->Width, bmp->Height);
+
 	Stack^ stack = gcnew Stack();
 	Color col;
 
 	Color argb = bmp->GetPixel(x, y);
 
 	bmp->SetPixel(x, y, c);
+	resultBitmap->SetPixel(x, y, c);
 
 	Point^ p = gcnew Point(x, y);
 
@@ -264,9 +271,18 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 
 			if (col.ToArgb() != c.ToArgb() && col.ToArgb() == argb.ToArgb())
 			{
+				resultBitmap->SetPixel(p->X, p->Y, c);
 				bmp->SetPixel(p->X, p->Y, c);
 			}
+			else
+			{
+				resultBitmap->SetPixel(p->X, p->Y, bmp->GetPixel(p->X, p->Y));
+			}
 		}
+		
+
+		//RemoveUnusedObjects(p->X, p->Y);
+		
 		
 		if (!IsBorder(bmp, p->X, p->Y + 1))
 		{
@@ -278,7 +294,15 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 				stack->Push(tempPoint);
 				delete tempPoint;
 			}
+			else
+			{
+				resultBitmap->SetPixel(p->X, p->Y + 1, bmp->GetPixel(p->X, p->Y + 1));
+			}
 		}
+		
+		
+		//RemoveUnusedObjects(p->X, p->Y + 1);
+		
 		
 		if (!IsBorder(bmp, p->X + 1, p->Y))
 		{
@@ -290,7 +314,14 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 				stack->Push(tempPoint);
 				delete tempPoint;
 			}
+			else
+			{
+				resultBitmap->SetPixel(p->X + 1, p->Y, bmp->GetPixel(p->X + 1, p->Y));
+			}
 		}
+		
+		//RemoveUnusedObjects(p->X + 1, p->Y);
+		
 		
 		if (!IsBorder(bmp, p->X, p->Y - 1))
 		{
@@ -302,7 +333,14 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 				stack->Push(tempPoint);
 				delete tempPoint;
 			}
-		}		
+			else
+			{
+				resultBitmap->SetPixel(p->X, p->Y - 1, bmp->GetPixel(p->X, p->Y - 1));
+			}
+		}	
+		
+		//RemoveUnusedObjects(p->X, p->Y - 1);
+		
 
 		if (!IsBorder(bmp, p->X, p->Y))
 		{
@@ -314,11 +352,19 @@ Bitmap ^ BresenhamDrawing::PolygonFill(Bitmap ^ bmp, int x, int y, Color c)
 				stack->Push(tempPoint);
 				delete tempPoint;
 			}
+			else
+			{
+				resultBitmap->SetPixel(p->X - 1, p->Y, bmp->GetPixel(p->X - 1, p->Y));
+			}
 		}
+		
+		//RemoveUnusedObjects(p->X - 1, p->Y);
+		
 	}
 
+	delete bmp;
 	delete p;
-	return bmp;
+	return resultBitmap;
 }
 
 System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT, int xR, int yB)
@@ -428,6 +474,47 @@ System::Collections::Generic::List<Line^>^ BresenhamDrawing::Clip(int xL, int yT
 	return lines;
 }
 
+System::Collections::Generic::List<Line^>^ BresenhamDrawing::GetLines()
+{
+	System::Collections::Generic::List<Line^>^ lines = gcnew System::Collections::Generic::List<Line^>();
+
+	for each (GeometricObject^ it in geometricObjectList)
+	{
+		if (it->GetType()->ToString()->CompareTo("Line") == 0)
+		{
+			Line^ line = gcnew Line(it->color,
+				((Line^)it)->GetPoint0()->X, ((Line^)it)->GetPoint0()->Y,
+				((Line^)it)->GetPoint1()->X, ((Line^)it)->GetPoint1()->Y);
+
+			lines->Add(line);
+		}
+	}
+
+	return lines;
+}
+
+void BresenhamDrawing::RemoveUnusedObjects(int x, int y)
+{
+	bool needDelete = true;
+
+	for each (GeometricObject^ go in geometricObjectList)
+	{
+		
+		for each (Point point in go->points)
+		{
+			if (point.X == x && point.Y == y)
+			{
+				needDelete = false;
+			}
+		}
+
+		if (!needDelete && geometricObjectListForPolygonFilling->IndexOf(go) == -1)
+		{
+			geometricObjectListForPolygonFilling->Add(go);
+		}
+	}
+}
+
 
 int BresenhamDrawing::ComputeOutCode(int xL, int yT, int xR, int yB, int x, int y)
 {
@@ -465,6 +552,25 @@ Bitmap^ BresenhamDrawing::Draw(Bitmap^ bmp, Color c)
 
 	points->Clear();
 
+	return bmp;
+}
+
+Bitmap ^ BresenhamDrawing::Draw(Bitmap^ bmp, System::Collections::Generic::List<GeometricObject^>^ geometricObjectListForPolygonFilling, Color c)
+{
+	for each (GeometricObject^ go in geometricObjectListForPolygonFilling)
+	{
+		for each (Point point in go->points)
+		{
+			if (point.X >= 0 && point.Y >= 0)
+			bmp->SetPixel(point.X, point.Y, c);
+		}
+	}
+	//delete pictureBox->Image;
+	//pictureBox->Image = temp_bitmap;
+
+
+	//points->Clear();
+	delete geometricObjectList;
 	return bmp;
 }
 

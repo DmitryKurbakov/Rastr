@@ -21,7 +21,7 @@ ActionsHandlers::ActionsHandlers(PictureBox^ pictureBox, Color c)
 	this->pictureBox = pictureBox;
 
 	//Arbitary size
-	Bitmap^ bitmap = gcnew Bitmap(1920, 1080);
+	Bitmap^ bitmap = gcnew Bitmap(800, 600);
 	this->pictureBox->Image = bitmap;
 
 	IsDrawn = false;
@@ -180,23 +180,23 @@ void ActionsHandlers::PolygonFillingAreaPictureBoxOnClickHandler(Point ^ point)
 	pictureBox->Image = brezDrawing->PolygonFill(bmp, point->X, point->Y, color);
 }
 
-void ActionsHandlers::ClippingHandler(Point^ point)
+void ActionsHandlers::ClippingHandler(Point^ point, int itemIndex)
 {
-	if (point0->X == -1 && point0->Y == -1)
+	if (point0->X == -1 && point0->Y == -1 && xL == -1)
 	{
 		point0->X = point->X;
 		point0->Y = point->Y;
 	}
 
 	//If it was pressed refresh values for the second point
-	else
+	else if (xL == -1)
 	{
 		point1->X = point->X;
 		point1->Y = point->Y;
 	}
 
 	//If values of all points were refreshed, transfer their to Drawing Layer 
-	if (point0->X != -1 && point0->Y != -1 && point1->X != -1 && point1->Y != -1)
+	if (point0->X != -1 && point0->Y != -1 && point1->X != -1 && point1->Y != -1 || xL != -1)
 	{
 		/*if (point0->X > point1->X)
 		{
@@ -220,37 +220,63 @@ void ActionsHandlers::ClippingHandler(Point^ point)
 			point1->Y = temp;
 		}*/
 
-		int xL, yT, xR, yB;
+		
 
-		xL = point0->X < point1->X ? point0->X : point1->X;
-		yT = point0->Y < point1->Y ? point0->Y : point1->Y;
-		xR = point0->X > point1->X ? point0->X : point1->X;
-		yB = point0->Y > point1->Y ? point0->Y : point1->Y;
-
-		System::Collections::Generic::List<Line^>^ lines = brezDrawing->Clip(xL, yT, xR, yB);
-
-		Bitmap^ resultImage = gcnew Bitmap(1920, 1080);
-
-		for each (Line^ line in lines)
+		if (xL == -1)
 		{
-			//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
-			//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
-			resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
+			xL = point0->X < point1->X ? point0->X : point1->X;
+			yT = point0->Y < point1->Y ? point0->Y : point1->Y;
+			xR = point0->X > point1->X ? point0->X : point1->X;
+			yB = point0->Y > point1->Y ? point0->Y : point1->Y;
+		}
+	
+
+		System::Collections::Generic::List<Line^>^ lines;
+
+		Bitmap^ resultImage = gcnew Bitmap(pictureBox->Image->Width, pictureBox->Image->Height);
+
+		if (itemIndex == 0)
+		{
+			lines = brezDrawing->GetLines();
+			for each (Line^ line in lines)
+			{
+				//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
+				//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
+				resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
+			}
+
+			delete pictureBox->Image;
+			pictureBox->Image = resultImage;
 		}
 
+		if (itemIndex == 2)
+		{
+			lines = brezDrawing->Clip(xL, yT, xR, yB);
+			for each (Line^ line in lines)
+			{
+				//line->SetPoint0(line->GetPoint0()->X - xL, line->GetPoint0()->Y - yT);
+				//line->SetPoint1(line->GetPoint1()->X - xL, line->GetPoint1()->Y - yT);
+				resultImage = brezDrawing->DrawLine(resultImage, line->GetPoint0(), line->GetPoint1(), line->color, false);
+			}
+
+			delete pictureBox->Image;
+			pictureBox->Image = resultImage;
+		}
+
+		
+		
 		//delete clipPictureBox->Image;
 		//clipPictureBox->Image = resultImage;
 		//clipForm->ShowDialog();
 
-		delete pictureBox->Image;
-		pictureBox->Image = resultImage;
-
-		
+			
 		Graphics^ gr = Graphics::FromImage(pictureBox->Image);
 
 		Pen^ pen = gcnew Pen(Brushes::Red);
+
 		gr->DrawRectangle(pen, xL, yT, xR - xL, yB - yT);
 		
+		pictureBox->Refresh();
 		delete pen;
 		delete gr;
 
@@ -266,6 +292,22 @@ void ActionsHandlers::OnClosed(System::Object ^sender, System::EventArgs ^e)
 	delete clipPictureBox->Image;
 }
 
+void ActionsHandlers::OnCheckedChange()
+{
+	point0->X = -1;
+	point0->Y = -1;
+	point1->X = -1;
+	point1->Y = -1;
+	radius = -1;
+	width = -1;
+	height = -1;
+}
+
+void ActionsHandlers::onClippingComboBoxChange()
+{
+	
+}
+
 
 void ActionsHandlers::RandomButtonClickHandler()
 {
@@ -274,7 +316,7 @@ void ActionsHandlers::RandomButtonClickHandler()
 	
 	for (int i = 0; i < figuresCount; i++)
 	{
-		int	choice = rnd->Next(1, 3);
+		int	choice = rnd->Next(1, 4);
 
 		if (choice == 1)
 		{

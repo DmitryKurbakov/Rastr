@@ -61,6 +61,20 @@ private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
 private: System::Windows::Forms::GroupBox^  colorGroupBox;
 private: System::Windows::Forms::Button^  colorButton;
 private: System::Windows::Forms::RadioButton^  ClippingRadioButton;
+private: System::Windows::Forms::ComboBox^  clippingComboBox;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -88,6 +102,7 @@ private:
 	{
 		this->clearButton = (gcnew System::Windows::Forms::Button());
 		this->objectsGroupBox = (gcnew System::Windows::Forms::GroupBox());
+		this->ClippingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->PolygonFillingRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->ellipseRadioButton = (gcnew System::Windows::Forms::RadioButton());
 		this->LineFillingRadioButton = (gcnew System::Windows::Forms::RadioButton());
@@ -104,7 +119,7 @@ private:
 		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->colorGroupBox = (gcnew System::Windows::Forms::GroupBox());
 		this->colorButton = (gcnew System::Windows::Forms::Button());
-		this->ClippingRadioButton = (gcnew System::Windows::Forms::RadioButton());
+		this->clippingComboBox = (gcnew System::Windows::Forms::ComboBox());
 		this->objectsGroupBox->SuspendLayout();
 		this->pictureGroupBox->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox))->BeginInit();
@@ -116,16 +131,17 @@ private:
 		// clearButton
 		// 
 		this->clearButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
-		this->clearButton->Location = System::Drawing::Point(12, 419);
+		this->clearButton->Location = System::Drawing::Point(12, 472);
 		this->clearButton->Name = L"clearButton";
 		this->clearButton->Size = System::Drawing::Size(76, 30);
 		this->clearButton->TabIndex = 3;
-		this->clearButton->Text = L"Clear";
+		this->clearButton->Text = L"Очистить";
 		this->clearButton->UseVisualStyleBackColor = true;
 		this->clearButton->Click += gcnew System::EventHandler(this, &MyForm::clearButton_Click);
 		// 
 		// objectsGroupBox
 		// 
+		this->objectsGroupBox->Controls->Add(this->clippingComboBox);
 		this->objectsGroupBox->Controls->Add(this->ClippingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->PolygonFillingRadioButton);
 		this->objectsGroupBox->Controls->Add(this->ellipseRadioButton);
@@ -134,50 +150,65 @@ private:
 		this->objectsGroupBox->Controls->Add(this->lineRadioButton);
 		this->objectsGroupBox->Location = System::Drawing::Point(12, 31);
 		this->objectsGroupBox->Name = L"objectsGroupBox";
-		this->objectsGroupBox->Size = System::Drawing::Size(121, 159);
+		this->objectsGroupBox->Size = System::Drawing::Size(160, 213);
 		this->objectsGroupBox->TabIndex = 4;
 		this->objectsGroupBox->TabStop = false;
-		this->objectsGroupBox->Text = L"Object";
+		this->objectsGroupBox->Text = L"Инструменты";
+		// 
+		// ClippingRadioButton
+		// 
+		this->ClippingRadioButton->AutoSize = true;
+		this->ClippingRadioButton->Location = System::Drawing::Point(9, 134);
+		this->ClippingRadioButton->Name = L"ClippingRadioButton";
+		this->ClippingRadioButton->Size = System::Drawing::Size(79, 17);
+		this->ClippingRadioButton->TabIndex = 5;
+		this->ClippingRadioButton->Text = L"Отсечение";
+		this->ClippingRadioButton->UseVisualStyleBackColor = true;
+		this->ClippingRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnClippingCheckedChanged);
 		// 
 		// PolygonFillingRadioButton
 		// 
 		this->PolygonFillingRadioButton->AutoSize = true;
 		this->PolygonFillingRadioButton->Location = System::Drawing::Point(10, 111);
 		this->PolygonFillingRadioButton->Name = L"PolygonFillingRadioButton";
-		this->PolygonFillingRadioButton->Size = System::Drawing::Size(92, 17);
+		this->PolygonFillingRadioButton->Size = System::Drawing::Size(136, 17);
 		this->PolygonFillingRadioButton->TabIndex = 4;
-		this->PolygonFillingRadioButton->Text = L"Polygon Filling";
+		this->PolygonFillingRadioButton->Text = L"Заполнение полигона";
 		this->PolygonFillingRadioButton->UseVisualStyleBackColor = true;
+		this->PolygonFillingRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
 		// ellipseRadioButton
 		// 
 		this->ellipseRadioButton->AutoSize = true;
 		this->ellipseRadioButton->Location = System::Drawing::Point(10, 65);
 		this->ellipseRadioButton->Name = L"ellipseRadioButton";
-		this->ellipseRadioButton->Size = System::Drawing::Size(55, 17);
+		this->ellipseRadioButton->Size = System::Drawing::Size(62, 17);
 		this->ellipseRadioButton->TabIndex = 2;
-		this->ellipseRadioButton->Text = L"Ellipse";
+		this->ellipseRadioButton->Text = L"Еллипс";
 		this->ellipseRadioButton->UseVisualStyleBackColor = true;
+		this->ellipseRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
 		// LineFillingRadioButton
 		// 
 		this->LineFillingRadioButton->AutoSize = true;
 		this->LineFillingRadioButton->Location = System::Drawing::Point(10, 88);
 		this->LineFillingRadioButton->Name = L"LineFillingRadioButton";
-		this->LineFillingRadioButton->Size = System::Drawing::Size(74, 17);
+		this->LineFillingRadioButton->Size = System::Drawing::Size(148, 17);
 		this->LineFillingRadioButton->TabIndex = 3;
-		this->LineFillingRadioButton->Text = L"Line Filling";
+		this->LineFillingRadioButton->Text = L"Построчное заполнение";
 		this->LineFillingRadioButton->UseVisualStyleBackColor = true;
+		this->LineFillingRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
 		// circleRadioButton
 		// 
 		this->circleRadioButton->AutoSize = true;
 		this->circleRadioButton->Location = System::Drawing::Point(10, 42);
 		this->circleRadioButton->Name = L"circleRadioButton";
-		this->circleRadioButton->Size = System::Drawing::Size(51, 17);
+		this->circleRadioButton->Size = System::Drawing::Size(87, 17);
 		this->circleRadioButton->TabIndex = 1;
-		this->circleRadioButton->Text = L"Circle";
+		this->circleRadioButton->Text = L"Окружность";
 		this->circleRadioButton->UseVisualStyleBackColor = true;
+		this->circleRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
 		// lineRadioButton
 		// 
@@ -185,11 +216,12 @@ private:
 		this->lineRadioButton->Checked = true;
 		this->lineRadioButton->Location = System::Drawing::Point(10, 19);
 		this->lineRadioButton->Name = L"lineRadioButton";
-		this->lineRadioButton->Size = System::Drawing::Size(45, 17);
+		this->lineRadioButton->Size = System::Drawing::Size(65, 17);
 		this->lineRadioButton->TabIndex = 0;
 		this->lineRadioButton->TabStop = true;
-		this->lineRadioButton->Text = L"Line";
+		this->lineRadioButton->Text = L"Прямая";
 		this->lineRadioButton->UseVisualStyleBackColor = true;
+		this->lineRadioButton->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
 		// 
 		// pictureGroupBox
 		// 
@@ -198,12 +230,12 @@ private:
 			| System::Windows::Forms::AnchorStyles::Right));
 		this->pictureGroupBox->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 		this->pictureGroupBox->Controls->Add(this->pictureBox);
-		this->pictureGroupBox->Location = System::Drawing::Point(142, 31);
+		this->pictureGroupBox->Location = System::Drawing::Point(176, 31);
 		this->pictureGroupBox->Name = L"pictureGroupBox";
-		this->pictureGroupBox->Size = System::Drawing::Size(730, 418);
+		this->pictureGroupBox->Size = System::Drawing::Size(696, 477);
 		this->pictureGroupBox->TabIndex = 6;
 		this->pictureGroupBox->TabStop = false;
-		this->pictureGroupBox->Text = L"Picture";
+		this->pictureGroupBox->Text = L"Изображение";
 		// 
 		// pictureBox
 		// 
@@ -213,7 +245,7 @@ private:
 		this->pictureBox->BackColor = System::Drawing::SystemColors::ControlLightLight;
 		this->pictureBox->Location = System::Drawing::Point(6, 19);
 		this->pictureBox->Name = L"pictureBox";
-		this->pictureBox->Size = System::Drawing::Size(718, 393);
+		this->pictureBox->Size = System::Drawing::Size(684, 452);
 		this->pictureBox->TabIndex = 0;
 		this->pictureBox->TabStop = false;
 		this->pictureBox->Click += gcnew System::EventHandler(this, &MyForm::pictureBox_Click);
@@ -222,12 +254,12 @@ private:
 		// 
 		this->settingsGroupBox->Controls->Add(this->objectsFromFileButton);
 		this->settingsGroupBox->Controls->Add(this->randomButton);
-		this->settingsGroupBox->Location = System::Drawing::Point(12, 301);
+		this->settingsGroupBox->Location = System::Drawing::Point(10, 358);
 		this->settingsGroupBox->Name = L"settingsGroupBox";
-		this->settingsGroupBox->Size = System::Drawing::Size(121, 77);
+		this->settingsGroupBox->Size = System::Drawing::Size(158, 77);
 		this->settingsGroupBox->TabIndex = 7;
 		this->settingsGroupBox->TabStop = false;
-		this->settingsGroupBox->Text = L"Settings";
+		this->settingsGroupBox->Text = L"Объекты";
 		// 
 		// objectsFromFileButton
 		// 
@@ -235,7 +267,7 @@ private:
 		this->objectsFromFileButton->Name = L"objectsFromFileButton";
 		this->objectsFromFileButton->Size = System::Drawing::Size(101, 23);
 		this->objectsFromFileButton->TabIndex = 1;
-		this->objectsFromFileButton->Text = L"Objects from file...";
+		this->objectsFromFileButton->Text = L"Из файла";
 		this->objectsFromFileButton->UseVisualStyleBackColor = true;
 		this->objectsFromFileButton->Click += gcnew System::EventHandler(this, &MyForm::objectsFromFileButton_Click);
 		// 
@@ -245,7 +277,7 @@ private:
 		this->randomButton->Name = L"randomButton";
 		this->randomButton->Size = System::Drawing::Size(101, 23);
 		this->randomButton->TabIndex = 0;
-		this->randomButton->Text = L"Random";
+		this->randomButton->Text = L"Случайные";
 		this->randomButton->UseVisualStyleBackColor = true;
 		this->randomButton->Click += gcnew System::EventHandler(this, &MyForm::randomButton_Click);
 		// 
@@ -264,24 +296,24 @@ private:
 		// fileToolStripMenuItem
 		// 
 		this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-		this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
-		this->fileToolStripMenuItem->Text = L"File";
+		this->fileToolStripMenuItem->Size = System::Drawing::Size(48, 20);
+		this->fileToolStripMenuItem->Text = L"Файл";
 		// 
 		// aboutToolStripMenuItem
 		// 
 		this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
-		this->aboutToolStripMenuItem->Size = System::Drawing::Size(52, 20);
-		this->aboutToolStripMenuItem->Text = L"About";
+		this->aboutToolStripMenuItem->Size = System::Drawing::Size(94, 20);
+		this->aboutToolStripMenuItem->Text = L"О программе";
 		// 
 		// colorGroupBox
 		// 
 		this->colorGroupBox->Controls->Add(this->colorButton);
-		this->colorGroupBox->Location = System::Drawing::Point(12, 242);
+		this->colorGroupBox->Location = System::Drawing::Point(10, 299);
 		this->colorGroupBox->Name = L"colorGroupBox";
-		this->colorGroupBox->Size = System::Drawing::Size(121, 53);
+		this->colorGroupBox->Size = System::Drawing::Size(160, 53);
 		this->colorGroupBox->TabIndex = 2;
 		this->colorGroupBox->TabStop = false;
-		this->colorGroupBox->Text = L"Color";
+		this->colorGroupBox->Text = L"Цвет";
 		// 
 		// colorButton
 		// 
@@ -289,23 +321,28 @@ private:
 		this->colorButton->Name = L"colorButton";
 		this->colorButton->Size = System::Drawing::Size(104, 23);
 		this->colorButton->TabIndex = 0;
-		this->colorButton->Text = L"Choose color";
+		this->colorButton->Text = L"Выбрать цвет";
 		this->colorButton->UseVisualStyleBackColor = true;
 		this->colorButton->Click += gcnew System::EventHandler(this, &MyForm::colorButton_Click);
 		// 
-		// ClippingRadioButton
+		// clippingComboBox
 		// 
-		this->ClippingRadioButton->AutoSize = true;
-		this->ClippingRadioButton->Location = System::Drawing::Point(10, 134);
-		this->ClippingRadioButton->Name = L"ClippingRadioButton";
-		this->ClippingRadioButton->Size = System::Drawing::Size(62, 17);
-		this->ClippingRadioButton->TabIndex = 5;
-		this->ClippingRadioButton->Text = L"Clipping";
-		this->ClippingRadioButton->UseVisualStyleBackColor = true;
+		this->clippingComboBox->Enabled = false;
+		this->clippingComboBox->FormattingEnabled = true;
+		this->clippingComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(3) {
+			L"Окно и отрезки целиком", L"Разным цветом",
+				L"Окно и видимые части отрезков"
+		});
+		this->clippingComboBox->Location = System::Drawing::Point(20, 157);
+		this->clippingComboBox->Name = L"clippingComboBox";
+		this->clippingComboBox->Size = System::Drawing::Size(126, 21);
+		this->clippingComboBox->TabIndex = 6;
+		this->clippingComboBox->SelectedIndex = 2;
+		this->clippingComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::OnSelectedIndexChanged);
 		// 
 		// MyForm
 		// 
-		this->ClientSize = System::Drawing::Size(884, 461);
+		this->ClientSize = System::Drawing::Size(884, 520);
 		this->Controls->Add(this->colorGroupBox);
 		this->Controls->Add(this->settingsGroupBox);
 		this->Controls->Add(this->pictureGroupBox);
@@ -355,7 +392,7 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 	}
 	if (ClippingRadioButton->Checked)
 	{
-		actionshandlers->ClippingHandler(cursor_point);
+		actionshandlers->ClippingHandler(cursor_point, clippingComboBox->SelectedIndex);
 	}
 
 	delete cursor_point;
@@ -382,4 +419,30 @@ private: System::Void colorButton_Click(System::Object^  sender, System::EventAr
 		actionshandlers->SetColor(colorDialog->Color);
 	}
 }
+		 void OnCheckedChanged(System::Object ^sender, System::EventArgs ^e);
+		 void OnSelectedIndexChanged(System::Object ^sender, System::EventArgs ^e);
+		 void OnClippingCheckedChanged(System::Object ^sender, System::EventArgs ^e);
 };
+
+
+void MyForm::OnCheckedChanged(System::Object ^sender, System::EventArgs ^e)
+{
+	clippingComboBox->Enabled = false;
+	actionshandlers->OnCheckedChange();
+}
+
+
+void MyForm::OnSelectedIndexChanged(System::Object ^sender, System::EventArgs ^e)
+{
+	
+	actionshandlers->ClippingHandler(actionshandlers->point0, clippingComboBox->SelectedIndex);
+
+	
+}
+
+
+void MyForm::OnClippingCheckedChanged(System::Object ^sender, System::EventArgs ^e)
+{
+	clippingComboBox->Enabled = true;
+	actionshandlers->onClippingComboBoxChange();
+}

@@ -27,6 +27,8 @@ private:
 
 	Color color;
 
+public:
+
 	//------------------------------------------------------------------
 	//Geometric Objects Variables
 	//------------------------------------------------------------------
@@ -40,11 +42,11 @@ private:
 	//Two radiuses of ellipse
 	int width, height;
 
-public:
-
 	bool IsDrawn;
 
 	void SetColor(Color c);
+
+	int xL = -1, yT = -1, xR = -1, yB = -1;
 
 	ActionsHandlers(PictureBox^ pictureBox, Color c);
 	ActionsHandlers();
@@ -65,12 +67,16 @@ public:
 
 	void PolygonFillingAreaPictureBoxOnClickHandler(Point^ point);
 
-	void ClippingHandler(Point^ point);
+	void ClippingHandler(Point^ point, int itemIndex);
 
 	void RandomButtonClickHandler();
 
 	void getObjectsFormFileClickHandler();
 	void OnClosed(System::Object ^sender, System::EventArgs ^e);
+
+	void OnCheckedChange();
+
+	void onClippingComboBoxChange();
 };
 
 

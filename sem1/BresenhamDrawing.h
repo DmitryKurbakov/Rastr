@@ -19,11 +19,13 @@ ref class BresenhamDrawing :
 private:
 
 	System::Collections::Generic::List<GeometricObject^>^ geometricObjectList;
+	System::Collections::Generic::List<GeometricObject^>^ geometricObjectListForPolygonFilling;
 
 	Bitmap^ temp_bitmap;
 
 	//Method of setting pixels on the picture using Algorithm layer
 	Bitmap^ Draw(Bitmap^ bmp, Color c);
+	Bitmap^ Draw(Bitmap^ bmp, System::Collections::Generic::List<GeometricObject^>^ geometricObjectListForPolygonFilling, Color c);
 
 	bool IsBorder(Bitmap^ bmp, int x, int y);
 
@@ -54,4 +56,7 @@ public:
 	Bitmap^ PolygonFill(Bitmap^ bmp, int x, int y, Color c);
 
 	System::Collections::Generic::List<Line^>^ Clip(int x0, int y0, int x1, int y1);
+	System::Collections::Generic::List<Line^>^ GetLines();
+
+	void RemoveUnusedObjects(int x, int y);
 };

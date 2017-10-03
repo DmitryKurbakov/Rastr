@@ -33,11 +33,11 @@ Point ^ Line::GetPoint1()
 }
 
 
-Line::Line(Color c, System::Collections::Generic::List<System::Tuple<int, int>^>^ points)
+Line::Line(Color c)
 {
 	color = c;
 
-	this->points = gcnew System::Collections::Generic::List<Point>();
+	/*this->points = gcnew System::Collections::Generic::List<Point>();
 
 	for each (System::Tuple<int, int>^ tuple  in points)
 	{
@@ -46,7 +46,7 @@ Line::Line(Color c, System::Collections::Generic::List<System::Tuple<int, int>^>
 		tempPoint.Y = tuple->Item2;
 
 		this->points->Add(tempPoint);
-	}
+	}*/
 }
 
 Line::Line(Color c, int x0, int y0, int x1, int y1)

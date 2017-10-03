@@ -11,7 +11,7 @@ private:
 
 public:
 
-	void SetPoint0(Point^ point0);
+	void SetPoint0(int x, int y);
 	Point^ GetPoint0();
 
 	void SetWidth(int width);

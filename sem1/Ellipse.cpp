@@ -2,9 +2,9 @@
 
 
 
-void Ellipse::SetPoint0(Point ^ point0)
+void Ellipse::SetPoint0(int x, int y)
 {
-	this->point0 = point0;
+	this->point0 = gcnew Point(x, y);
 }
 
 Point ^ Ellipse::GetPoint0()

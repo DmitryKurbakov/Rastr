@@ -1,8 +1,8 @@
 #include "Circle.h"
 
-void Circle ::SetPoint0(Point ^ point0)
+void Circle ::SetPoint0(int x, int y)
 {
-	this->point0 = point0;
+	this->point0 = gcnew Point(x, y);
 }
 
 Point ^ Circle::GetPoint0()
